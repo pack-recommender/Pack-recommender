@@ -6,7 +6,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Pushing changes to the `main` branch will automatically trigger a deployment via [Netlify](https://www.netlify.com/).
 
-🔗 **Live URL**: [https://6848aae0e8808481a3cc045a--packrecommender.netlify.app/](https://6848aae0e8808481a3cc045a--packrecommender.netlify.app/)
+🔗 **Live URL**: [https://packrecommender.netlify.app/](https://packrecommender.netlify.app/)
 
 ## 🧪 Development Server
 
