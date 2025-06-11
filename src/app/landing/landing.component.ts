@@ -1,14 +1,19 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { LanguageService } from '../shared/services/language.service';
+import { CommonModule } from '@angular/common';
 declare const AOS: any;
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
 })
 export class LandingComponent implements AfterViewInit {
+  constructor(public langService: LanguageService) {
+
+  }
   ngAfterViewInit(): void {
     AOS.init({ duration: 800 });
 

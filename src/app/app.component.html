@@ -1,1 +1,12 @@
+<div class="language-dropdown">
+  <button class="dropdown-toggle" (click)="toggleDropdown()">
+    🌐 {{ currentLang.toUpperCase() }}
+  </button>
+  <ul *ngIf="dropdownOpen" class="dropdown-menu">
+    <li *ngFor="let lang of languages" (click)="changeLang(lang.code)">
+      {{ lang.label }}
+    </li>
+  </ul>
+</div>
+
 <router-outlet></router-outlet>

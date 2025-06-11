@@ -38,10 +38,12 @@
 <main>
     <div class="w-100 overflow-hidden bg-gray-100" id="top">
         <div class="container position-relative">
-            <div class="col-12 col-lg-8 mt-0 h-100 position-absolute top-0 end-0 bg-cover" data-aos="fade-left"
+            <div class="col-12 col-lg-8 mt-0 h-100 position-absolute top-0 end-0 bg-cover" [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'"
                 style="background-image: url(assets/img/webp/interior11.webp);"></div>
             <div class="row">
-                <div class="col-lg-7 py-vh-6 position-relative" data-aos="fade-right">
+                <div class="col-lg-7 py-vh-6 position-relative"
+                 [ngStyle]="{ direction: langService.dir }"
+                 [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'">
                     <h1 class="display-1 fw-bold mt-5">Smarter Packaging Decisions That Drive Real Business Growth</h1>
                     <p class="lead">Work with Dani Tulchinski to Unlock Powerful Packaging Strategies</p>
                     <!-- <a href="#" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Get started free</a> -->
@@ -52,7 +54,7 @@
     <div class="py-vh-5 w-100 overflow-hidden" id="services">
         <div class="container">
             <div class="row d-flex justify-content-end">
-                <div class="col-lg-8" data-aos="fade-down">
+                <div class="col-lg-8" data-aos="fade-down" [ngStyle]="{ direction: langService.dir }">
                     <h2 class="display-6">
                         With 13+ years of industry experience, I help brands unlock growth through smarter packaging
                         strategies, cutting-edge digital printing, and AI-powered solutions. Whether you're launching a
@@ -61,27 +63,27 @@
                 </div>
             </div>
             <div class="row d-flex align-items-center">
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-md-6 col-lg-4 py-vh-1" data-aos="fade-up" data-aos-delay="200" [ngStyle]="{ direction: langService.dir }">
                     <span class="h5 fw-lighter">01.</span>
-                    <h3 class="py-5 border-top border-dark">Growth-Driven Strategy</h3>
+                    <h3 class="py-3 border-top border-dark">Growth-Driven Strategy</h3>
                     <p> At Sealed Air and HP Indigo, I led initiatives that generated $50M+ in revenue. I know how to
                         align packaging with business goals — and turn innovation into profit.</p>
                     <!-- <a href="#" class="link-fancy">Learn more
   </a> -->
                 </div>
 
-                <div class="col-md-6 col-lg-4 py-vh-4 pb-0" data-aos="fade-up" data-aos-delay="400">
+                <div class="col-md-6 col-lg-4 py-vh-5 pb-0" data-aos="fade-up" data-aos-delay="400" [ngStyle]="{ direction: langService.dir }">
                     <span class="h5 fw-lighter">02.</span>
-                    <h3 class="py-5 border-top border-dark">Comprehensive Expertise</h3>
+                    <h3 class="py-3 border-top border-dark">Comprehensive Expertise</h3>
                     <p>From material science to e-commerce to sustainability — I offer full-spectrum guidance tailored
                         to your product, audience, and market.</p>
                     <!-- <a href="#" class="link-fancy">Learn more
   </a> -->
                 </div>
 
-                <div class="col-md-6 col-lg-4 py-vh-6 pb-0" data-aos="fade-up" data-aos-delay="600">
+                <div class="col-md-6 col-lg-4 py-vh-6 pb-0" data-aos="fade-up" data-aos-delay="600" [ngStyle]="{ direction: langService.dir }">
                     <span class="h5 fw-lighter">03.</span>
-                    <h3 class="py-5 border-top border-dark">Smarter Solutions, Faster</h3>
+                    <h3 class="py-3 border-top border-dark">Smarter Solutions, Faster</h3>
                     <p>I harness Generative AI and digital tools to deliver packaging insights with speed and precision
                         — so you make confident, data-backed decisions.</p>
                     <!-- <a href="#" class="link-fancy">Learn more
@@ -100,7 +102,7 @@
                     <div class="row gx-5 d-flex">
                         <div class="col-md-11">
                             <div class="shadow ratio ratio-16x9 rounded bg-cover bp-center align-self-end"
-                                data-aos="fade-right"
+                                [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'"
                                 style="background-image: url(assets/img/webp/people15.webp);--bs-aspect-ratio: 50%;">
                             </div>
                         </div>
@@ -110,22 +112,26 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="col-12 shadow ratio rounded bg-cover mt-5 bp-center" data-aos="fade-left"
+                            <div class="col-12 shadow ratio rounded bg-cover mt-5 bp-center" [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'"
                                 style="background-image: url(assets/img/webp/people4.webp);--bs-aspect-ratio: 150%;">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <h3 class="py-5 border-top border-dark" data-aos="fade-left">
+                    <h3 class="py-5 border-top border-dark" 
+                    [ngStyle]="{ direction: langService.dir }"
+                    [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'">
                         From Global Strategy to On-the-Ground Execution
                     </h3>
-                    <p data-aos="fade-left" data-aos-delay="200">
+                    <p [ngStyle]="{ direction: langService.dir }" 
+                    [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'" data-aos-delay="200">
                         At Sealed Air and HP Indigo, I led cross-functional teams, built global partnerships, and helped
                         pioneer technologies like Pack Ready and Digital Pouch Factory — unlocking new $1B+ markets and
                         reshaping how brands approach packaging.
                     </p>
-                    <p data-aos="fade-left" data-aos-delay="300">
+                    <p [ngStyle]="{ direction: langService.dir }"
+                    [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'" data-aos-delay="300">
                         With a background in chemistry, business, and AI-driven tools, I bridge the gap between R&D,
                         marketing, and operations to deliver results that are not just innovative — but measurable,
                         scalable, and sustainable.
@@ -148,18 +154,26 @@
         <div class="container">
             <div class="row d-flex justify-content-between align-items-center">
                 <div class="col-lg-5">
-                    <h3 class="py-5 border-top border-dark" data-aos="fade-right">Impact by the Numbers</h3>
+                    <h3 class="py-5 border-top border-dark" 
+                    [ngStyle]="{ direction: langService.dir }"
+                    [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'">Impact by the Numbers</h3>
                 </div>
                 <div class="col-lg-6">
                     <div class="row">
                         <div class="col-12">
-                            <h2 class="display-6 mb-5" data-aos="fade-down"> A snapshot of the results I’ve helped create — measurable, strategic, and driven by innovation across packaging, digital printing, and e-commerce.</h2>
+                            <h2 class="display-6 mb-5" 
+                            [ngStyle]="{ direction: langService.dir }"
+                            data-aos="fade-down"> A snapshot of the results I’ve helped create — measurable, strategic, and driven by innovation across packaging, digital printing, and e-commerce.</h2>
                         </div>
-                        <div class="col-lg-6" data-aos="fade-up">
+                        <div class="col-lg-6" 
+                        [ngStyle]="{ direction: langService.dir }"
+                        data-aos="fade-up">
                             <div class="display-1 fw-bold py-4">+$50M</div>
                             <p class="text-black-50">Business growth driven by digital packaging initiatives at Sealed Air and HP Indigo — turning new technologies into revenue and market share.</p>
                         </div>
-                        <div class="col-lg-6" data-aos="fade-up">
+                        <div class="col-lg-6" 
+                        [ngStyle]="{ direction: langService.dir }"
+                        data-aos="fade-up">
                             <div class="display-1 fw-bold py-4">12+</div>
                             <p class="text-black-50">Disruptive solutions developed and deployed, including Digital Pouch Factory, Pack Ready, and secure flexible packaging technologies.</p>
                         </div>
@@ -175,7 +189,8 @@
             <div class="row overflow-scroll">
                 <div class="col-12">
                     <div class="row vw-100 px-0 py-vh-5 d-flex align-items-center scrollx">
-                        <div class="col-md-2" data-aos="fade-up">
+                        <div class="col-md-2" 
+                        data-aos="fade-up">
                             <img src="assets/img/webp/interior37.webp" class="rounded shadow img-fluid"
                                 alt="nice gallery image" width="512" height="341">
                         </div>
@@ -206,12 +221,16 @@
 
     </div>
 
-    <div class="container py-vh-4 w-100 overflow-hidden">
+    <!-- <div class="container py-vh-4 w-100 overflow-hidden">
         <div class="row d-flex justify-content-center align-items-center">
             <div class="col-lg-5">
-                <h3 class="py-5 border-top border-dark" data-aos="fade-right">What our clients say</h3>
+                <h3 class="py-5 border-top border-dark" 
+                [ngStyle]="{ direction: langService.dir }"
+                [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'">What our clients say</h3>
             </div>
-            <div class="col-md-7" data-aos="fade-left">
+            <div class="col-md-7" 
+            [ngStyle]="{ direction: langService.dir }"
+            [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'">
                 <blockquote>
                     <div class="fs-4 my-3 fw-light pt-4 border-bottom pb-3">“I´am the CEO of this company. So maybe you
                         think "he will tell us something super awesome about it only". But no. Its a really strange
@@ -226,13 +245,15 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 
     <div class="py-vh-6 bg-gray-900 text-light w-100 overflow-hidden" id="workwithus">
         <div class="container">
             <div class="row d-flex justify-content-center">
                 <div class="row d-flex justify-content-center text-center">
-                    <div class="col-lg-8 text-center" data-aos="fade">
+                    <div class="col-lg-8 text-center" 
+                    [ngStyle]="{ direction: langService.dir }"
+                    data-aos="fade">
                         <p class="text-secondary lead">Let´s start a project together!</p>
                         <h2 class="display-6 mb-5">Hell no! This button is linked to a none working contact form. A none
                             working form without any user feedback. So you might think you done something wrong. But in
@@ -248,10 +269,11 @@
         </div>
     </div>
 
-    <div class="bg-light w-100 overflow-hidden" id="testimonials">
+    <!-- <div class="bg-light w-100 overflow-hidden" id="testimonials">
         <div class="container py-vh-6">
             <div class="row d-flex justify-content-center">
-                <div class="col-12 col-lg-10 col-xl-8 text-center">
+                <div class="col-12 col-lg-10 col-xl-8 text-center"
+                [ngStyle]="{ direction: langService.dir }">
                     <h2 class="display-6">Loved by people all around the globe</h2>
                     <p class="lead">Our spaces and offices are soooooo lovely, no one would give us a negative rating!
                         And look at these trustworthy avatar pictures! Trust us!</p>
@@ -259,7 +281,7 @@
                 <div class="col-12 mt-4">
                     <div class="row row-cols-1 row-cols-md-2 g-5 d-flex align-items-center">
 
-                        <div class="col-12 col-lg-6 col-xl-4" data-aos="fade-right">
+                        <div class="col-12 col-lg-6 col-xl-4" [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'">
                             <div class="card p-4 mt-3 border-0">
                                 <div class="card-body">
                                     <div class="text-dark py-2 fs-3"><svg xmlns="http://www.w3.org/2000/svg" width="16"
@@ -360,7 +382,7 @@
                         </div>
 
                         <div class="col-12 col-lg-6 col-xl-4">
-                            <div class="card p-4 mt-3 border-0" data-aos="fade-left">
+                            <div class="card p-4 mt-3 border-0" [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'">
                                 <div class="card-body">
                                     <div class="text-dark py-2 fs-3"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                             height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
@@ -408,7 +430,7 @@
                         </div>
 
                         <div class="col-12 col-lg-6 col-xl-4">
-                            <div class="card p-4 mt-3 border-0" data-aos="fade-right">
+                            <div class="card p-4 mt-3 border-0" [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'">
                                 <div class="card-body">
                                     <div class="text-dark py-2 fs-3"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                             height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
@@ -506,7 +528,7 @@
                         </div>
 
                         <div class="col-12 col-lg-6 col-xl-4">
-                            <div class="card p-4 shadow mt-3 border-0" data-aos="fade-left">
+                            <div class="card p-4 shadow mt-3 border-0" [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'">
                                 <div class="card-body">
                                     <div class="text-dark py-2 fs-3"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                             height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
@@ -560,12 +582,12 @@
 
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="small py-vh-3 w-100 overflow-hidden">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-lg-4 border-end" data-aos="fade-up">
+                <div class="col-md-6 col-lg-4 border-end" data-aos="fade-up" [ngStyle]="{ direction: langService.dir }">
                     <div class="d-flex">
                         <div class="col-md-3 flex-fill pt-3 pe-3 pe-md-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="currentColor"
@@ -581,7 +603,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4 border-end" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-md-6 col-lg-4 border-end" [ngStyle]="{ direction: langService.dir }" data-aos="fade-up" data-aos-delay="200">
                     <div class="d-flex">
                         <div class="col-md-3 flex-fill pt-3 pt-3 pe-3 pe-md-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="currentColor"
@@ -600,7 +622,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="col-md-6 col-lg-4" [ngStyle]="{ direction: langService.dir }" data-aos="fade-up" data-aos-delay="400">
                     <div class="d-flex">
                         <div class="col-md-3 flex-fill pt-3 pt-3 pe-3 pe-md-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="currentColor"
@@ -624,7 +646,7 @@
         </div>
     </div>
 
-    <div class="container py-vh-3 border-top" data-aos="fade" data-aos-delay="200">
+    <div class="container py-vh-3 border-top" [ngStyle]="{ direction: langService.dir }" data-aos="fade" data-aos-delay="200">
         <div class="row d-flex justify-content-center">
             <div class="col-12 col-lg-8 text-center">
                 <h3 class="fs-2 fw-light">Stay in touch with our<span class="fw-bold">
@@ -656,7 +678,7 @@
 </main>
 
 <footer>
-    <div class="container small border-top">
+    <!-- <div class="container small border-top">
         <div class="row py-5 d-flex justify-content-between">
 
             <div class="col-12 col-lg-6 col-xl-3 border-end p-5">
@@ -728,5 +750,5 @@
 
     <div class="container text-center py-3 small">Made by <a href="https://templatedeck.com" class="link-fancy"
             target="_blank">templatedeck.com</a>
-    </div>
+    </div> -->
 </footer>
