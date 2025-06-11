@@ -1,12 +1,13 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { LanguageService } from '../shared/services/language.service';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 declare const AOS: any;
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
 })

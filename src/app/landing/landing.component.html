@@ -14,23 +14,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="#aboutus">About us</a></li>
-                <li class="nav-item"><a class="nav-link" href="#numbers">Numbers</a></li>
-                <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
-                <li class="nav-item"><a class="nav-link" href="#workwithus">Work with us</a></li>
-                <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">{{ 'nav.services' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#aboutus">{{ 'nav.about' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#numbers">{{ 'nav.numbers' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#gallery">{{ 'nav.gallery' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#workwithus">{{ 'nav.work' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#testimonials">{{ 'nav.testimonials' | translate }}</a></li>
             </ul>
-            <a href="https://templatedeck.com" class="link-dark pb-1 link-fancy me-2">
-                Download this Template
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-download ms-1" viewBox="0 0 16 16">
-                    <path
-                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                    <path
-                        d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                </svg>
-            </a>
         </div>
     </div>
 </nav>
@@ -44,8 +34,8 @@
                 <div class="col-lg-7 py-vh-6 position-relative"
                  [ngStyle]="{ direction: langService.dir }"
                  [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'">
-                    <h1 class="display-1 fw-bold mt-5">Smarter Packaging Decisions That Drive Real Business Growth</h1>
-                    <p class="lead">Work with Dani Tulchinski to Unlock Powerful Packaging Strategies</p>
+                    <h1 class="display-1 fw-bold mt-5">{{ 'hero.title' | translate }}</h1>
+                    <p class="lead">{{ 'hero.subtitle' | translate }}</p>
                     <!-- <a href="#" class="btn btn-dark btn-xl shadow me-3 rounded-0 my-5">Get started free</a> -->
                 </div>
             </div>
@@ -56,36 +46,31 @@
             <div class="row d-flex justify-content-end">
                 <div class="col-lg-8" data-aos="fade-down" [ngStyle]="{ direction: langService.dir }">
                     <h2 class="display-6">
-                        With 13+ years of industry experience, I help brands unlock growth through smarter packaging
-                        strategies, cutting-edge digital printing, and AI-powered solutions. Whether you're launching a
-                        new product or scaling globally, I’ll guide you to packaging decisions that drive results.
+                        {{ 'services.intro' | translate }}
                     </h2>
                 </div>
             </div>
             <div class="row d-flex align-items-center">
                 <div class="col-md-6 col-lg-4 py-vh-1" data-aos="fade-up" data-aos-delay="200" [ngStyle]="{ direction: langService.dir }">
                     <span class="h5 fw-lighter">01.</span>
-                    <h3 class="py-3 border-top border-dark">Growth-Driven Strategy</h3>
-                    <p> At Sealed Air and HP Indigo, I led initiatives that generated $50M+ in revenue. I know how to
-                        align packaging with business goals — and turn innovation into profit.</p>
+                    <h3 class="py-3 border-top border-dark">{{ 'services.item1.title' | translate }}</h3>
+                    <p>{{ 'services.item1.desc' | translate }}</p>
                     <!-- <a href="#" class="link-fancy">Learn more
   </a> -->
                 </div>
 
                 <div class="col-md-6 col-lg-4 py-vh-5 pb-0" data-aos="fade-up" data-aos-delay="400" [ngStyle]="{ direction: langService.dir }">
                     <span class="h5 fw-lighter">02.</span>
-                    <h3 class="py-3 border-top border-dark">Comprehensive Expertise</h3>
-                    <p>From material science to e-commerce to sustainability — I offer full-spectrum guidance tailored
-                        to your product, audience, and market.</p>
+                    <h3 class="py-3 border-top border-dark">{{ 'services.item2.title' | translate }}</h3>
+                    <p>{{ 'services.item2.desc' | translate }}</p>
                     <!-- <a href="#" class="link-fancy">Learn more
   </a> -->
                 </div>
 
                 <div class="col-md-6 col-lg-4 py-vh-6 pb-0" data-aos="fade-up" data-aos-delay="600" [ngStyle]="{ direction: langService.dir }">
                     <span class="h5 fw-lighter">03.</span>
-                    <h3 class="py-3 border-top border-dark">Smarter Solutions, Faster</h3>
-                    <p>I harness Generative AI and digital tools to deliver packaging insights with speed and precision
-                        — so you make confident, data-backed decisions.</p>
+                    <h3 class="py-3 border-top border-dark">{{ 'services.item3.title' | translate }}</h3>
+                    <p>{{ 'services.item3.desc' | translate }}</p>
                     <!-- <a href="#" class="link-fancy">Learn more
   </a> -->
                 </div>
@@ -122,19 +107,15 @@
                     <h3 class="py-5 border-top border-dark" 
                     [ngStyle]="{ direction: langService.dir }"
                     [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'">
-                        From Global Strategy to On-the-Ground Execution
+                        {{ 'about.title' | translate }}
                     </h3>
                     <p [ngStyle]="{ direction: langService.dir }" 
                     [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'" data-aos-delay="200">
-                        At Sealed Air and HP Indigo, I led cross-functional teams, built global partnerships, and helped
-                        pioneer technologies like Pack Ready and Digital Pouch Factory — unlocking new $1B+ markets and
-                        reshaping how brands approach packaging.
+                        {{ 'about.p1' | translate }}
                     </p>
                     <p [ngStyle]="{ direction: langService.dir }"
                     [attr.data-aos]="langService.dir === 'ltr' ? 'fade-left' : 'fade-right'" data-aos-delay="300">
-                        With a background in chemistry, business, and AI-driven tools, I bridge the gap between R&D,
-                        marketing, and operations to deliver results that are not just innovative — but measurable,
-                        scalable, and sustainable.
+                        {{ 'about.p2' | translate }}
                     </p>
 
                     <!-- <h3 class="py-5 border-top border-dark" data-aos="fade-left">We did some interesting stuff in our field of work. For example we collect a lot of these free photos and use them on our website.</h3>
@@ -156,26 +137,26 @@
                 <div class="col-lg-5">
                     <h3 class="py-5 border-top border-dark" 
                     [ngStyle]="{ direction: langService.dir }"
-                    [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'">Impact by the Numbers</h3>
+                    [attr.data-aos]="langService.dir === 'ltr' ? 'fade-right' : 'fade-left'">{{ 'numbers.title' | translate }}</h3>
                 </div>
                 <div class="col-lg-6">
                     <div class="row">
                         <div class="col-12">
-                            <h2 class="display-6 mb-5" 
+                            <h2 class="display-6 mb-5"
                             [ngStyle]="{ direction: langService.dir }"
-                            data-aos="fade-down"> A snapshot of the results I’ve helped create — measurable, strategic, and driven by innovation across packaging, digital printing, and e-commerce.</h2>
+                            data-aos="fade-down">{{ 'numbers.intro' | translate }}</h2>
                         </div>
                         <div class="col-lg-6" 
                         [ngStyle]="{ direction: langService.dir }"
                         data-aos="fade-up">
                             <div class="display-1 fw-bold py-4">+$50M</div>
-                            <p class="text-black-50">Business growth driven by digital packaging initiatives at Sealed Air and HP Indigo — turning new technologies into revenue and market share.</p>
+                            <p class="text-black-50">{{ 'numbers.item1' | translate }}</p>
                         </div>
                         <div class="col-lg-6" 
                         [ngStyle]="{ direction: langService.dir }"
                         data-aos="fade-up">
                             <div class="display-1 fw-bold py-4">12+</div>
-                            <p class="text-black-50">Disruptive solutions developed and deployed, including Digital Pouch Factory, Pack Ready, and secure flexible packaging technologies.</p>
+                            <p class="text-black-50">{{ 'numbers.item2' | translate }}</p>
                         </div>
                     </div>
                 </div>
@@ -254,14 +235,11 @@
                     <div class="col-lg-8 text-center" 
                     [ngStyle]="{ direction: langService.dir }"
                     data-aos="fade">
-                        <p class="text-secondary lead">Let´s start a project together!</p>
-                        <h2 class="display-6 mb-5">Hell no! This button is linked to a none working contact form. A none
-                            working form without any user feedback. So you might think you done something wrong. But in
-                            reality we just don´t want to start anything with you or anyone else.</h2>
+                        <p class="text-secondary lead">{{ 'cta.subtitle' | translate }}</p>
+                        <h2 class="display-6 mb-5">{{ 'cta.text' | translate }}</h2>
                     </div>
                     <div class="col-12">
-                        <a href="#" class="btn btn-warning btn-xl shadow me-3 mt-4" data-aos="fade-down">Get in
-                            contact</a>
+                        <a href="#" class="btn btn-warning btn-xl shadow me-3 mt-4" data-aos="fade-down">{{ 'cta.button' | translate }}</a>
                     </div>
                 </div>
 
@@ -597,9 +575,8 @@
                             </svg>
                         </div>
                         <div class="col-md-9 flex-fill">
-                            <h3 class="h5 my-2">Delivery Service</h3>
-                            <p>If we had any physical goods we would deliver them to your door steps. Of course in time
-                                and to the right adress. But we have no products...</p>
+                            <h3 class="h5 my-2">{{ 'features.item1.title' | translate }}</h3>
+                            <p>{{ 'features.item1.desc' | translate }}</p>
                         </div>
                     </div>
                 </div>
@@ -615,9 +592,8 @@
                             </svg>
                         </div>
                         <div class="col-md-9 flex-fill">
-                            <h3 class="h5 my-2">Independently Checked</h3>
-                            <p>Maybe we would do something to ensure that you get what you ordered. But you can´t order
-                                anything here, so we can give you a 100% gurantee that anything would be great!</p>
+                            <h3 class="h5 my-2">{{ 'features.item2.title' | translate }}</h3>
+                            <p>{{ 'features.item2.desc' | translate }}</p>
                         </div>
                     </div>
                 </div>
@@ -634,10 +610,8 @@
                             </svg>
                         </div>
                         <div class="col-md-9 flex-fill">
-                            <h3 class="h5 my-2">Online Support</h3>
-                            <p>Okay, we have this crazy online support form. Fill it out and the content will be mailed
-                                to you as PDF. Print it out. Than send it via Fax to our super duper hidden Fax number.
-                            </p>
+                            <h3 class="h5 my-2">{{ 'features.item3.title' | translate }}</h3>
+                            <p>{{ 'features.item3.desc' | translate }}</p>
                         </div>
                     </div>
                 </div>
@@ -646,35 +620,6 @@
         </div>
     </div>
 
-    <div class="container py-vh-3 border-top" [ngStyle]="{ direction: langService.dir }" data-aos="fade" data-aos-delay="200">
-        <div class="row d-flex justify-content-center">
-            <div class="col-12 col-lg-8 text-center">
-                <h3 class="fs-2 fw-light">Stay in touch with our<span class="fw-bold">
-                        monthly and free</span>
-                    newsletter!
-                </h3>
-            </div>
-            <div class="col-12 col-lg-8 text-center">
-                <div class="row">
-                    <div class="grouped-inputs border bg-light p-2">
-                        <div class="row">
-                            <div class="col">
-                                <form class="form-floating">
-                                    <input type="email" class="form-control p-3" id="floatingInput"
-                                        placeholder="name@example.com">
-                                    <label for="floatingInput">Email address</label>
-                                </form>
-                            </div>
-                            <div class="col-auto">
-                                <a href="#" class="btn btn-dark py-3 px-5">Subscribe</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
 </main>
 
 <footer>
