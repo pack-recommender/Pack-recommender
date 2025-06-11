@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "services": "Services",
+    "about": "About us",
+    "numbers": "Numbers",
+    "gallery": "Gallery",
+    "work": "Work with us",
+    "testimonials": "Testimonials"
+  },
+  "hero": {
+    "title": "Smarter Packaging Decisions That Drive Real Business Growth",
+    "subtitle": "Work with Dani Tulchinski to Unlock Powerful Packaging Strategies"
+  },
+  "services": {
+    "intro": "With 13+ years of industry experience, I help brands unlock growth through smarter packaging strategies, cutting-edge digital printing, and AI-powered solutions. Whether you're launching a new product or scaling globally, I’ll guide you to packaging decisions that drive results.",
+    "item1": {
+      "title": "Growth-Driven Strategy",
+      "desc": "At Sealed Air and HP Indigo, I led initiatives that generated $50M+ in revenue. I know how to align packaging with business goals — and turn innovation into profit."
+    },
+    "item2": {
+      "title": "Comprehensive Expertise",
+      "desc": "From material science to e-commerce to sustainability — I offer full-spectrum guidance tailored to your product, audience, and market."
+    },
+    "item3": {
+      "title": "Smarter Solutions, Faster",
+      "desc": "I harness Generative AI and digital tools to deliver packaging insights with speed and precision — so you make confident, data-backed decisions."
+    }
+  },
+  "about": {
+    "title": "From Global Strategy to On-the-Ground Execution",
+    "p1": "At Sealed Air and HP Indigo, I led cross-functional teams, built global partnerships, and helped pioneer technologies like Pack Ready and Digital Pouch Factory — unlocking new $1B+ markets and reshaping how brands approach packaging.",
+    "p2": "With a background in chemistry, business, and AI-driven tools, I bridge the gap between R&D, marketing, and operations to deliver results that are not just innovative — but measurable, scalable, and sustainable."
+  },
+  "numbers": {
+    "title": "Impact by the Numbers",
+    "intro": "A snapshot of the results I’ve helped create — measurable, strategic, and driven by innovation across packaging, digital printing, and e-commerce.",
+    "item1": "Business growth driven by digital packaging initiatives at Sealed Air and HP Indigo — turning new technologies into revenue and market share.",
+    "item2": "Disruptive solutions developed and deployed, including Digital Pouch Factory, Pack Ready, and secure flexible packaging technologies."
+  },
+  "features": {
+    "item1": {
+      "title": "End-to-End Guidance",
+      "desc": "From ideation to market launch, I help you build packaging that stands out and scales."
+    },
+    "item2": {
+      "title": "Data-Driven Decisions",
+      "desc": "Leverage my experience with AI and digital printing to make choices backed by real metrics."
+    },
+    "item3": {
+      "title": "Global Industry Network",
+      "desc": "Tap into partnerships across the packaging value chain to accelerate innovation and growth."
+    }
+  },
+  "cta": {
+    "subtitle": "Ready to transform your packaging?",
+    "text": "Contact me to discover how strategic packaging and digital innovation can grow your business.",
+    "button": "Start the conversation"
+  }
+}
