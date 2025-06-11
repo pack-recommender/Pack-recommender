@@ -50,7 +50,7 @@
                     </h2>
                 </div>
             </div>
-            <div class="row d-flex align-items-center">
+            <div class="row d-flex align-items-center" [ngStyle]="{ direction: langService.dir }">
                 <div class="col-md-6 col-lg-4 py-vh-1" data-aos="fade-up" data-aos-delay="200" [ngStyle]="{ direction: langService.dir }">
                     <span class="h5 fw-lighter">01.</span>
                     <h3 class="py-3 border-top border-dark">{{ 'services.item1.title' | translate }}</h3>
