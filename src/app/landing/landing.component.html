@@ -9,7 +9,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" [ngStyle]="{ direction: langService.dir }">
                 <li class="nav-item"><a class="nav-link" href="#services">{{ 'nav.services' | translate }}</a></li>
                 <li class="nav-item"><a class="nav-link" href="#aboutus">{{ 'nav.about' | translate }}</a></li>
                 <li class="nav-item"><a class="nav-link" href="#numbers">{{ 'nav.numbers' | translate }}</a></li>
