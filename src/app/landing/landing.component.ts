@@ -60,7 +60,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
   sendMessage(): void {
     if (this.contactForm.invalid) return;
 
-    this.http.post('/netlify/functions/send-email', this.contactForm.value).subscribe({
+    this.http.post('/.netlify/functions/send-email', this.contactForm.value).subscribe({
       next: () => {
         this.successMessage = this.translate.instant('contact.success');
         this.errorMessage = '';
