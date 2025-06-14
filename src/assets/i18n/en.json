@@ -5,7 +5,7 @@
     "numbers": "Numbers",
     "gallery": "Gallery",
     "work": "Work with us",
-    "testimonials": "Testimonials"
+    "contactus": "Contact us"
   },
   "hero": {
     "title": "Smarter Packaging Decisions That Drive Real Business Growth",
@@ -55,5 +55,21 @@
     "subtitle": "Ready to transform your packaging?",
     "text": "Contact me to discover how strategic packaging and digital innovation can grow your business.",
     "button": "Start the conversation"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "message": "Message",
+    "submit": "Submit",
+    "placeholder": {
+      "name": "Your name",
+      "email": "name@example.com",
+      "phone": "(123) 456-7890",
+      "message": "Enter your message"
+    },
+    "success": "Message sent successfully!",
+    "error": "There was an error sending your message."
   }
 }
