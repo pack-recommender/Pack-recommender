@@ -4,7 +4,7 @@ exports.handler = async (event) => {
   try {
     const { name, email, phone, message } = JSON.parse(event.body || '{}');
 
-    if (!name || !email || !message) {
+    if (!name || !email) {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: 'Missing required fields: name, email, or message' }),
