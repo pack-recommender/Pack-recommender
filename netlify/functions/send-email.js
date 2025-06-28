@@ -18,7 +18,7 @@ exports.handler = async (event) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'info@packrecommender.com', // ✅ Must match your verified domain
+        from: "Info <info@packrecommender.com>", // ✅ Must match your verified domain
         to: [
           'segalmc@gmail.com',
           'danitul@gmail.com'
