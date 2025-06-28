@@ -71,5 +71,6 @@
     },
     "success": "Message sent successfully!",
     "error": "There was an error sending your message."
-  }
+  },
+  "maintenance": "We are fastening some screws!"
 }
