@@ -18,6 +18,12 @@ export class LanguageService {
         { code: 'he', label: 'עברית' }
     ];
 
+    private langMap: { [key: string]: string } = {
+        'en': 'EN',
+        'he': 'עב'
+    };
+    
+
     constructor(
         private translate: TranslateService,
         rendererFactory: RendererFactory2
@@ -42,7 +48,11 @@ export class LanguageService {
     }
 
     getCurrentLang(): string {
-        return this.translate.currentLang || this.translate.defaultLang || 'en';
+        const lang = this.translate.currentLang || this.translate.defaultLang || 'en';
+        if(this.langMap[lang]) {
+            return this.langMap[lang];
+        }
+        return lang;
     }
 
     getLanguages(): LanguageOption[] {

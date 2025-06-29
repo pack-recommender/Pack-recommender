@@ -17,6 +17,8 @@ export class AppComponent {
   dropdownOpen = false;
   currentLang = 'en';
 
+  
+
   constructor(private langService: LanguageService) {
     this.langService.initLanguage();
     this.currentLang = this.langService.getCurrentLang();
@@ -28,7 +30,7 @@ export class AppComponent {
 
   changeLang(lang: string) {
     this.langService.setLanguage(lang);
-    this.currentLang = lang;
+    this.currentLang = this.langService.getCurrentLang();
     this.dropdownOpen = false;
   }
 

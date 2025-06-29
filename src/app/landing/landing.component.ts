@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BrowserModule } from '@angular/platform-browser';
 declare const AOS: any;
+declare var bootstrap: any; // Add this if not already declared
 
 @Component({
   selector: 'app-landing',
@@ -71,5 +72,15 @@ export class LandingComponent implements OnInit, AfterViewInit {
         this.errorMessage = this.translate.instant('contact.error');
       }
     });
+  }
+
+    closeNavbar() {
+    const navbarCollapse = document.getElementById('navbarSupportedContent');
+    if (navbarCollapse) {
+      const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+      if (bsCollapse) {
+        bsCollapse.hide();
+      }
+    }
   }
 }

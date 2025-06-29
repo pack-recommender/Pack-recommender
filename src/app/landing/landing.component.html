@@ -1,6 +1,6 @@
 <nav id="navScroll" class="navbar navbar-expand-lg navbar-light fixed-top" tabindex="0">
-    <div class="container">
-        <a class="navbar-brand pe-4 fs-4" href="/">
+    <div class="container" [ngStyle]="{ direction: langService.dir }">
+        <a class="navbar-brand fs-4" href="#top" [ngClass]="langService.dir === 'rtl' ? 'ps-3' : 'pe-3'" (click)="closeNavbar()">
             <img src="assets/img/logo.png" alt="Logo" height="32" class="d-inline-block align-text-top">
             <span class="ms-1 fw-bolder">Pack Recommender</span>
         </a>
@@ -8,14 +8,14 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngStyle]="{ direction: langService.dir }">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#services">{{ 'nav.services' | translate }}</a></li>
-                <li class="nav-item"><a class="nav-link" href="#aboutus">{{ 'nav.about' | translate }}</a></li>
-                <li class="nav-item"><a class="nav-link" href="#numbers">{{ 'nav.numbers' | translate }}</a></li>
-                <li class="nav-item"><a class="nav-link" href="#gallery">{{ 'nav.gallery' | translate }}</a></li>
-                <li class="nav-item"><a class="nav-link" href="#workwithus">{{ 'nav.work' | translate }}</a></li>
-                <li class="nav-item"><a class="nav-link" href="#contactus">{{ 'nav.contactus' | translate }}</a></li>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 mb-lg-0 me-auto" [ngClass]="langService.dir === 'rtl' ? 'ms-auto' : 'me-auto'">
+                <li class="nav-item"><a class="nav-link" href="#services" (click)="closeNavbar()">{{ 'nav.services' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#aboutus" (click)="closeNavbar()">{{ 'nav.about' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#numbers" (click)="closeNavbar()">{{ 'nav.numbers' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#gallery" (click)="closeNavbar()">{{ 'nav.gallery' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#workwithus" (click)="closeNavbar()">{{ 'nav.work' | translate }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contactus" (click)="closeNavbar()">{{ 'nav.contactus' | translate }}</a></li>
 
             </ul>
         </div>
@@ -150,7 +150,7 @@
         <div class="container-fluid">
             <div class="row overflow-scroll">
                 <div class="col-12">
-                    <div class="row vw-100 px-0 py-vh-5 d-flex align-items-center scrollx">
+                    <div class="row vw-100 px-0 py-vh-5 d-flex align-items-center">
                         <div class="col-md-2">
                             <img src="assets/img/gallery1.png" class="rounded shadow img-fluid" alt="nice gallery image"
                                 width="512" height="341">
@@ -260,10 +260,10 @@
         </div>
     </div>
 
-    <div class="py-vh-5 w-100 overflow-hidden" id="contactus">
+    <div class="py-vh-5 w-100 overflow-hidden">
         <div class="container py-vh-3 border-top" data-aos="fade" data-aos-delay="200">
             <div class="row d-flex justify-content-center" [ngStyle]="{ direction: langService.dir }">
-                <div class="col-12 col-lg-8">
+                <div class="col-12 col-lg-8" id="contactus">
                     <h2 class="display-5 text-center mb-4">{{ 'contact.title' | translate }}</h2>
 
                     <form [formGroup]="contactForm" (ngSubmit)="sendMessage()">
