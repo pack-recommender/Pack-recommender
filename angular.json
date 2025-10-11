@@ -26,12 +26,12 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-                {
+              {
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
               },
-               {
+              {
                 "glob": "**/*",
                 "input": "src/public",
                 "output": "/"
@@ -39,12 +39,17 @@
             ],
             "styles": [
               "src/styles.scss",
-               "src/assets/css/theme.min.css"
+              "src/assets/css/theme.min.css"
             ],
             "scripts": [
-               "src/assets/js/bootstrap.bundle.min.js",
-               "src/assets/js/aos.js"
-            ]
+              "src/assets/js/bootstrap.bundle.min.js",
+              "src/assets/js/aos.js"
+            ],
+            "server": "src/main.server.ts",
+            "prerender": true,
+            "ssr": {
+              "entry": "server.ts"
+            }
           },
           "configurations": {
             "production": {
@@ -82,6 +87,26 @@
           },
           "defaultConfiguration": "development"
         },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/packrecommender/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {}
+          },
+          "defaultConfiguration": "production"
+        },
+        "prerender": {
+          "builder": "@angular-devkit/build-angular:prerender",
+          "options": {
+            "browserTarget": "packrecommender:build:production",
+            "serverTarget": "packrecommender:server:production",
+            "routes": [ "/", "/services", "/aboutus", "/numbers", "/gallery", "/workwithus", "/contactus" ]
+          }
+        },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
@@ -108,5 +133,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "ba80d511-9e63-449f-b0cb-1eb5d77aff98"
   }
 }

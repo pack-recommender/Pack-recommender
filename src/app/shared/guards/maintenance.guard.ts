@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MaintenanceGuard implements CanActivate {
 
-  private isMaintenance = true; // toggle to false to disable maintenance mode
+  // Toggle to true to enable maintenance mode. Left false by default so the site is accessible.
+  private isMaintenance = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
     if (!this.isMaintenance) {
@@ -26,8 +28,13 @@ export class MaintenanceGuard implements CanActivate {
 
     // Extract test param from URL
     const urlParams = new URLSearchParams(state.url.split('?')[1] || '');
-    const testValue = urlParams.get('test') || localStorage.getItem('testValue') || '';
-    localStorage.setItem('testValue', testValue);  
+    const param = urlParams.get('test');
+    const storageAvailable = isPlatformBrowser(this.platformId);
+    const stored = storageAvailable ? localStorage.getItem('testValue') : null;
+    const testValue = param || stored || '';
+    if (storageAvailable) {
+      try { localStorage.setItem('testValue', testValue); } catch {}
+    }
     if (testValue === testParam) { 
       return true; // bypass maintenance if date param matches today
     }

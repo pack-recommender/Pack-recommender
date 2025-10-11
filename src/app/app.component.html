@@ -1,8 +1,8 @@
 <div class="language-dropdown">
-  <button class="dropdown-toggle" (click)="toggleDropdown()">
+  <button class="dropdown-toggle" (click)="toggleDropdown()" [disabled]="!canChangeLang">
     🌐 {{ currentLang.toUpperCase() }}
   </button>
-  <ul *ngIf="dropdownOpen" class="dropdown-menu">
+  <ul *ngIf="dropdownOpen && canChangeLang" class="dropdown-menu">
     <li *ngFor="let lang of languages" (click)="changeLang(lang.code)">
       {{ lang.label }}
     </li>
