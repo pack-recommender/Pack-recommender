@@ -6,6 +6,7 @@
     "start": "ng serve",
     "start-postrender": "npm run postprerender && npx http-server dist/packrecommender/browser -p 4200 --silent",
     "start-prerender": "npm run build && npm run prerender && npm run start-postrender",
+    "postbuild": "node scripts/insert-preload.js",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
