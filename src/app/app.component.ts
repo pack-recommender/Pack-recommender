@@ -14,7 +14,8 @@ export class AppComponent {
   title = 'packrecommender';
 
   dropdownOpen = false;
-  currentLang = 'en';
+  // derive currentLang from document (set by the server for localized builds)
+  currentLang = (typeof document !== 'undefined' && document.documentElement && document.documentElement.lang) ? document.documentElement.lang : 'en';
   canChangeLang = true;
 
   
