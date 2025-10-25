@@ -60,8 +60,7 @@
                 "scripts": true,
                 "styles": {
                   "minify": true,
-                  "inlineCritical": false,
-                  "inlineComponentStyles": false
+                  "inlineCritical": false
                 },
                 "fonts": true
               },
