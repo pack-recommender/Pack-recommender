@@ -27,5 +27,5 @@ export const routes: Routes = [
     },
 
     // fallback
-    { path: '**', component: NotFoundComponent, canActivate: [MaintenanceGuard] }
+    { path: '**', component: NotFoundComponent}
 ];

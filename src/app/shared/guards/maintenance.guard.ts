@@ -1,6 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { LanguageService } from '../services/language.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ export class MaintenanceGuard implements CanActivate {
   // Toggle to true to enable maintenance mode. Left false by default so the site is accessible.
   private isMaintenance = true;
 
-  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object,
+              private languageService: LanguageService) {
 
   }
 
@@ -37,11 +39,34 @@ export class MaintenanceGuard implements CanActivate {
     const testParam = `${day}${month}${year}`;
 
 
-    // Extract test param from URL
-    const storageAvailable = isPlatformBrowser(this.platformId);
+    // If the navigation only changes the URL fragment (anchor) on the same page,
+    // allow it through so in-page anchors like `#services` still work.
+    const strip = (u: string) => (u || '').split('#')[0].split('?')[0] || '/';
+    const targetBase = strip(state.url);
+    const currentBase = strip(this.router.url);
+    if (targetBase === currentBase && state.url.includes('#')) {
+      return true;
+    }
+
+    // Extract test param from URL (preferred) and only read localStorage as a
+    // fallback. We also cache the stored value to avoid repeated synchronous
+    // reads which can add overhead during rapid navigations.
     const urlParams = new URLSearchParams(state.url.split('?')[1] || '');
-    const localStorageValue = storageAvailable ? localStorage.getItem('testValue') : null;
-    const testValue = urlParams.get('test') || localStorageValue || '';
+    const paramTestValue = urlParams.get('test') || '';
+    let localStorageValue: string | null = null;
+    // cached read to avoid repeated localStorage access
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (MaintenanceGuard as any)._cachedTestValue = (MaintenanceGuard as any)._cachedTestValue || null;
+    const cached = (MaintenanceGuard as any)._cachedTestValue as string | null;
+    if (!paramTestValue && !cached && isPlatformBrowser(this.platformId)) {
+      try {
+        localStorageValue = localStorage.getItem('testValue');
+        (MaintenanceGuard as any)._cachedTestValue = localStorageValue;
+      } catch (e) {
+        localStorageValue = null;
+      }
+    }
+    const testValue = paramTestValue || cached || localStorageValue || '';
 
     if (testValue === testParam) { 
       if(!localStorageValue) {
@@ -59,16 +84,11 @@ export class MaintenanceGuard implements CanActivate {
       // try to extract language prefix from URL (e.g. /he/...) else fall back to stored lang or 'en'
       const langFromUrlMatch = state.url.match(/^\/(en|he)(?:\/|$)/);
       const langFromUrl = langFromUrlMatch ? langFromUrlMatch[1] : null;
-      const lang = langFromUrl || (isPlatformBrowser(this.platformId) ? (localStorage.getItem('lang') || 'en') : 'en');
-      // If running in the browser, do a hard redirect to the absolute path to
-      // guarantee no double-prefixing (prevents /en/en/maintenance). For server
-      // contexts, return an UrlTree so Angular can handle it.
-      if (isPlatformBrowser(this.platformId)) {
-        try {
-          location.replace(`/${lang}/maintenance`);
-        } catch (e) {}
-        return false;
-      }
+      // Prefer explicit language in URL; otherwise use the app's current
+      // language from LanguageService (in-memory, synchronous) to avoid slow
+      // localStorage reads during navigation.
+      const lang = langFromUrl || this.languageService.getLangCode() || 'en';
+      // build absolute UrlTree to avoid relative double-prefixing
       return this.router.parseUrl(`/${lang}/maintenance`);
     }
 

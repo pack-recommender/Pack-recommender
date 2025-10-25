@@ -32,7 +32,15 @@ app.get('*', (req, res) => {
   } catch (e) {
     // ignore
   }
-  return res.sendFile(path.join(DIST, 'index.html'));
+  const rootIndex = path.join(DIST, 'index.html');
+  if (fs.existsSync(rootIndex)) return res.sendFile(rootIndex);
+  // Fall back to a localized index if root index.html is not present
+  const enIndex = path.join(DIST, 'en', 'index.html');
+  const heIndex = path.join(DIST, 'he', 'index.html');
+  if (fs.existsSync(enIndex)) return res.sendFile(enIndex);
+  if (fs.existsSync(heIndex)) return res.sendFile(heIndex);
+  // nothing found — return 404 to make the problem visible
+  return res.status(404).send('Not found');
 });
 
 app.listen(PORT, () => {
