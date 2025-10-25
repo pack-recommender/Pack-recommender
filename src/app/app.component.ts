@@ -1,18 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LanguageService, LanguageOption } from './shared/services/language.service';
-import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+// Subscription not needed after removing runtime language service
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, TranslateModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
   title = 'packrecommender';
 
   dropdownOpen = false;
@@ -21,34 +19,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   
 
-  private langSub?: Subscription;
-
-  constructor(private langService: LanguageService) {
-  }
-
-  ngOnInit(): void {
-    this.langSub = this.langService.language$.subscribe((lang) => {
-      this.currentLang = this.langService.getDisplayLang(lang);
-    });
-    // subscribe to language switching availability
-    this.langService.canChangeLanguage$.subscribe((v) => this.canChangeLang = v);
-    this.langService.initLanguage();
-  }
-
+  // language switching removed; site is localized at build time (AOT)
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
   changeLang(lang: string) {
-    this.langService.setLanguage(lang);
-    this.dropdownOpen = false;
-  }
-
-  ngOnDestroy(): void {
-    this.langSub?.unsubscribe();
-  }
-
-  get languages(): LanguageOption[] {
-    return this.langService.getLanguages();
+    // for AOT builds, language is determined by URL; redirect to locale path
+    window.location.href = `/${lang}/`;
   }
 }

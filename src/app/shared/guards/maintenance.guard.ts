@@ -29,14 +29,10 @@ export class MaintenanceGuard implements CanActivate {
     // Extract test param from URL
     const urlParams = new URLSearchParams(state.url.split('?')[1] || '');
     const param = urlParams.get('test');
-    const storageAvailable = isPlatformBrowser(this.platformId);
-    const stored = storageAvailable ? localStorage.getItem('testValue') : null;
-    const testValue = param || stored || '';
-    if (storageAvailable) {
-      try { localStorage.setItem('testValue', testValue); } catch {}
-    }
-    if (testValue === testParam) { 
-      return true; // bypass maintenance if date param matches today
+    const testValue = param || '';
+    // Bypass only when the URL contains the correct test param for today
+    if (testValue === testParam) {
+      return true;
     }
 
 

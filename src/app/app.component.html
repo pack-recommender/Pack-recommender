@@ -3,9 +3,8 @@
     🌐 {{ currentLang.toUpperCase() }}
   </button>
   <ul *ngIf="dropdownOpen && canChangeLang" class="dropdown-menu">
-    <li *ngFor="let lang of languages" (click)="changeLang(lang.code)">
-      {{ lang.label }}
-    </li>
+    <li (click)="changeLang('en')">English</li>
+    <li (click)="changeLang('he')">עברית</li>
   </ul>
 </div>
 

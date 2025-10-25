@@ -1,6 +1,5 @@
 import { Injectable, Renderer2, RendererFactory2, Inject, PLATFORM_ID } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 
 export interface LanguageOption {
@@ -27,9 +26,9 @@ export class LanguageService {
     
 
     constructor(
-        private translate: TranslateService,
         rendererFactory: RendererFactory2,
-        @Inject(PLATFORM_ID) private platformId: Object
+        @Inject(PLATFORM_ID) private platformId: Object,
+        @Inject(DOCUMENT) private document: Document
     ) {
         this.renderer = rendererFactory.createRenderer(null, null);
     }
@@ -43,53 +42,20 @@ export class LanguageService {
     public canChangeLanguage$ = this.canChangeLangSubject.asObservable();
 
     initLanguage(): void {
-        // Detect whether localStorage is available (works in browser and not in some privacy modes)
-        let storageAvailable = false;
-        if (isPlatformBrowser(this.platformId)) {
-            try {
-                localStorage.setItem('__ls_test', '1');
-                localStorage.removeItem('__ls_test');
-                storageAvailable = true;
-            } catch (e) {
-                storageAvailable = false;
-            }
+        // determine language from URL path (server and prerender set html lang attribute)
+        try {
+            const urlLang = (this.document && this.document.documentElement && this.document.documentElement.lang) ? this.document.documentElement.lang : undefined;
+            const langToUse = this.isSupported(urlLang) ? urlLang as string : 'en';
+            this.canChangeLangSubject.next(true);
+            this.applyLangChange(langToUse);
+        } catch {
+            this.applyLangChange('en');
         }
-
-        if (!storageAvailable) {
-            // fallback to English and disable language switching UI
-            this.canChangeLangSubject.next(false);
-            this.setLanguage('en');
-            return;
-        }
-
-        // language switching available
-        this.canChangeLangSubject.next(true);
-
-        let langToUse = 'en';
-        const savedLang = localStorage.getItem('lang');
-        const browserLang = (typeof navigator !== 'undefined' && navigator.language) ? navigator.language.split('-')[0] : undefined;
-        if (savedLang) {
-            langToUse = savedLang;
-        } else if (browserLang && this.isSupported(browserLang)) {
-            langToUse = browserLang;
-        }
-
-        this.setLanguage(langToUse);
     }
 
+    // Runtime switching is no longer required when using AOT per-locale builds.
     setLanguage(langCode: string): void {
-        // Wait for translations to load before notifying subscribers so UI reflects new labels immediately
-        const use$ = this.translate.use(langCode);
-        // translate.use may return a string or an Observable
-        if (use$ && typeof (use$ as any).subscribe === 'function') {
-            (use$ as any).subscribe({
-                next: () => this.applyLangChange(langCode),
-                error: () => this.applyLangChange(langCode)
-            });
-        } else {
-            // fallback if translate.use is synchronous
-            this.applyLangChange(langCode);
-        }
+        this.applyLangChange(langCode);
     }
 
     private applyLangChange(langCode: string) {
@@ -99,23 +65,20 @@ export class LanguageService {
         } catch {}
 
         if (isPlatformBrowser(this.platformId)) {
-            try {
-                localStorage.setItem('lang', langCode);
-            } catch (e) {
-                // ignore storage errors in restricted environments
-            }
-
             this.dir = langCode === 'he' ? 'rtl' : 'ltr';
-            this.renderer.addClass(document.body, this.dir);
-            this.renderer.setAttribute(document.body, 'lang', langCode);
+            // use injected document reference instead of global
+            try {
+                this.renderer.addClass(this.document.body, this.dir);
+                this.renderer.setAttribute(this.document.body, 'lang', langCode);
+            } catch {}
         } else {
-            // fallback values for server rendering
+            // server rendering: documentElement lang/dir is set in APP_INITIALIZER
             this.dir = langCode === 'he' ? 'rtl' : 'ltr';
         }
     }
 
     getCurrentLang(): string {
-        const lang = this.translate.currentLang || this.translate.defaultLang || 'en';
+        const lang = (this.document && this.document.documentElement && this.document.documentElement.lang) ? this.document.documentElement.lang : 'en';
         if(this.langMap[lang]) {
             return this.langMap[lang];
         }
@@ -126,7 +89,8 @@ export class LanguageService {
      * Return display label for a language code. If no code provided, uses current TranslateService lang.
      */
     getDisplayLang(code?: string): string {
-        const lang = code || this.translate.currentLang || this.translate.defaultLang || 'en';
+        // Prefer explicit code, fallback to document lang or 'en'
+        const lang = code || ((this.document && this.document.documentElement && this.document.documentElement.lang) ? this.document.documentElement.lang : 'en');
         return this.langMap[lang] || lang;
     }
 
