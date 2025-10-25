@@ -56,12 +56,17 @@ for (const indexFile of indexFiles) {
       insert += `<script src="./${scripts}" defer></script>\n`;
     }
 
-    // also add any assets/js/*.js files (preload + defer) so third-party libs load after main
+    // also add any assets/js/*.js files (preload + defer/module) so third-party libs load after main
     if (assetsScripts && assetsScripts.length) {
       for (const s of assetsScripts) {
         const relPath = `./assets/js/${s}`;
         insert += `<link rel="preload" href="${relPath}" as="script">\n`;
-        insert += `<script src="${relPath}" defer></script>\n`;
+        // if file looks like an ESM build, inject as module so it executes correctly
+        if (/\.esm(\.min)?\.js$/.test(s) || /-esm(\.min)?\.js$/.test(s)) {
+          insert += `<script type="module" src="${relPath}"></script>\n`;
+        } else {
+          insert += `<script src="${relPath}" defer></script>\n`;
+        }
       }
     }
 
