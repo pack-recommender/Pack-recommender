@@ -47,7 +47,10 @@
               "src/styles.scss",
               "src/assets/css/theme.min.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "src/assets/js/bootstrap.bundle.js",
+              "src/assets/js/aos.js"
+            ],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {

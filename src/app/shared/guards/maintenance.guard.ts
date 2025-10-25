@@ -8,9 +8,11 @@ import { isPlatformBrowser } from '@angular/common';
 export class MaintenanceGuard implements CanActivate {
 
   // Toggle to true to enable maintenance mode. Left false by default so the site is accessible.
-  private isMaintenance = false;
+  private isMaintenance = true;
 
-  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
+
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
     if (!this.isMaintenance) {
@@ -28,11 +30,10 @@ export class MaintenanceGuard implements CanActivate {
 
     // Extract test param from URL
     const urlParams = new URLSearchParams(state.url.split('?')[1] || '');
-    const param = urlParams.get('test');
-    const testValue = param || '';
-    // Bypass only when the URL contains the correct test param for today
-    if (testValue === testParam) {
-      return true;
+    const testValue = urlParams.get('test') || localStorage.getItem('testValue') || '';
+    localStorage.setItem('testValue', testValue);  
+    if (testValue === testParam) { 
+      return true; // bypass maintenance if date param matches today
     }
 
 
