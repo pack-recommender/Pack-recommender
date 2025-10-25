@@ -29,6 +29,7 @@
             "polyfills": [
               "zone.js"
             ],
+            "extractCss": true,
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -60,7 +61,8 @@
                 "scripts": true,
                 "styles": {
                   "minify": true,
-                  "inlineCritical": false
+                  "inlineCritical": false,
+                  "inlineComponentStyles": false
                 },
                 "fonts": true
               },
