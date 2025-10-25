@@ -4,6 +4,7 @@ import { SeoService } from '../shared/services/seo.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, isPlatformBrowser, DOCUMENT as NG_DOCUMENT } from '@angular/common';
+import { LanguageService } from '../shared/services/language.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -37,8 +38,9 @@ export class LandingComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
     private title: Title,
     private meta: Meta,
-    private seo: SeoService
-    , private route: ActivatedRoute,
+    private seo: SeoService,
+    public languageService: LanguageService,
+    private route: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(NG_DOCUMENT) private document: Document
   ) {
@@ -65,7 +67,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
 
     // set per-route meta if provided in route data
     // Per-locale SEO: detect current document language (set on server via APP_INITIALIZER)
-    const lang = (this.document && this.document.documentElement && this.document.documentElement.lang) ? this.document.documentElement.lang : 'en';
+    const lang = this.languageService.getLangCode();
     const path = this.route.snapshot.routeConfig?.path ? '/' + this.route.snapshot.routeConfig?.path : '';
     const localizedUrl = `https://packrecommender.com${lang === 'he' ? '/he' : ''}${path}`;
     const data = this.route.snapshot.data as any;
@@ -95,6 +97,38 @@ export class LandingComponent implements OnInit, AfterViewInit {
       const htmlDir = (this.document && this.document.documentElement && this.document.documentElement.dir) ? this.document.documentElement.dir : 'ltr';
       (this as any).dir = htmlDir;
     } catch {}
+  }
+
+  navigateToFragment(fragment: string) {
+    try {
+      const lang = this.languageService.getLangCode();
+      const url = `/${lang}/#${fragment}`;
+      location.href = url;
+    } catch (e) {
+      const el = document.getElementById(fragment);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  onNavClick(event: Event, fragment: string) {
+    event.preventDefault();
+    // If current path already contains the language prefix, just scroll to fragment
+    try {
+      const lang = this.languageService.getLangCode();
+      const p = (typeof location !== 'undefined' && location.pathname) ? location.pathname : '/';
+      if (p.startsWith(`/${lang}`)) {
+        const el = document.getElementById(fragment);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          this.closeNavbar();
+          return;
+        }
+      }
+      // otherwise navigate to localized URL
+      this.navigateToFragment(fragment);
+    } catch {
+      this.navigateToFragment(fragment);
+    }
   }
 
   ngAfterViewInit(): void {

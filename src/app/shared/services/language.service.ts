@@ -42,10 +42,21 @@ export class LanguageService {
     public canChangeLanguage$ = this.canChangeLangSubject.asObservable();
 
     initLanguage(): void {
-        // determine language from URL path (server and prerender set html lang attribute)
+        // determine language preferring the first path segment (e.g. /he/...),
+        // then fall back to the document lang (set by server prerender), then 'en'
         try {
-            const urlLang = (this.document && this.document.documentElement && this.document.documentElement.lang) ? this.document.documentElement.lang : undefined;
-            const langToUse = this.isSupported(urlLang) ? urlLang as string : 'en';
+            let langToUse: string | undefined;
+            if (isPlatformBrowser(this.platformId) && typeof location !== 'undefined' && location.pathname) {
+                const seg = location.pathname.replace(/^\/+|\/+$/g, '').split('/')[0];
+                if (this.isSupported(seg)) {
+                    langToUse = seg;
+                }
+            }
+            if (!langToUse) {
+                const urlLang = (this.document && this.document.documentElement && this.document.documentElement.lang) ? this.document.documentElement.lang : undefined;
+                if (this.isSupported(urlLang)) langToUse = urlLang as string;
+            }
+            if (!langToUse) langToUse = 'en';
             this.canChangeLangSubject.next(true);
             this.applyLangChange(langToUse);
         } catch {
@@ -96,6 +107,14 @@ export class LanguageService {
 
     getLanguages(): LanguageOption[] {
         return this.supportedLanguages;
+    }
+
+    /**
+     * Return the current language code (e.g. 'en' or 'he').
+     */
+    getLangCode(): string {
+        const lang = (this.document && this.document.documentElement && this.document.documentElement.lang) ? this.document.documentElement.lang : 'en';
+        return this.isSupported(lang) ? lang : 'en';
     }
 
     private isSupported(code?: string): boolean {

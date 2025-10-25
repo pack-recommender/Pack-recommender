@@ -13,17 +13,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <script>
-    // Redirect root to /en/ by default for localized builds
-    (function() {
-      try {
-        var p = location.pathname.replace(/\/+/g, '/');
-        if (p === '/' || p === '') {
-          location.replace('/en/');
-        }
-      } catch (e) { /* noop */ }
-    })();
-  </script>
+  <!-- client-side redirect removed to avoid double language-prefix issues; handle default locale via server/router -->
   <app-root></app-root>
 </body>
 </html>
