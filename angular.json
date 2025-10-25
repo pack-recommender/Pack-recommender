@@ -29,7 +29,6 @@
             "polyfills": [
               "zone.js"
             ],
-            "extractCss": true,
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
