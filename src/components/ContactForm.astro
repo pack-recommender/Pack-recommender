@@ -192,6 +192,9 @@ const error = Astro.url.searchParams.get('error') === '1';
       return;
     }
 
+    if (form.dataset.contactBound === 'true') return;
+    form.dataset.contactBound = 'true';
+
     function showSuccess() {
       formPanel.classList.add('hidden');
       successPanel.classList.remove('hidden');
@@ -241,13 +244,15 @@ const error = Astro.url.searchParams.get('error') === '1';
       if (errorEl instanceof HTMLElement) {
         errorEl.classList.add('hidden');
       }
+
+      const body = new FormData(form);
       setLoading(true);
 
       try {
         const response = await fetch('/api/contact', {
           method: 'POST',
           headers: { Accept: 'application/json' },
-          body: new FormData(form),
+          body,
         });
 
         const data = await response.json().catch(() => ({ success: false }));
