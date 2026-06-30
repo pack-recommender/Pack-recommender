@@ -4,6 +4,8 @@ export interface ContactEnv {
   CONTACT_FROM_EMAIL?: string;
 }
 
+type ContactError = 'invalid_input' | 'missing_config' | 'resend_failed';
+
 function getReturnPath(locale: string, status: 'sent' | 'error'): string {
   const base = locale === 'he' ? '/he' : '/';
   const param = status === 'sent' ? 'sent=1' : 'error=1';
@@ -22,15 +24,22 @@ function redirect(path: string): Response {
   });
 }
 
-function jsonResponse(success: boolean): Response {
-  return new Response(JSON.stringify({ success }), {
+function jsonResponse(success: boolean, error?: ContactError): Response {
+  return new Response(JSON.stringify(success ? { success: true } : { success: false, error }), {
     status: success ? 200 : 422,
     headers: { 'Content-Type': 'application/json' },
   });
 }
 
-function respond(success: boolean, locale: string, request: Request): Response {
-  return wantsJson(request) ? jsonResponse(success) : redirect(getReturnPath(locale, success ? 'sent' : 'error'));
+function respond(
+  success: boolean,
+  locale: string,
+  request: Request,
+  error?: ContactError,
+): Response {
+  return wantsJson(request)
+    ? jsonResponse(success, error)
+    : redirect(getReturnPath(locale, success ? 'sent' : 'error'));
 }
 
 export async function handleContactPost(request: Request, env: ContactEnv): Promise<Response> {
@@ -46,16 +55,16 @@ export async function handleContactPost(request: Request, env: ContactEnv): Prom
     const message = String(formData.get('message') || '').trim().slice(0, 5000);
 
     if (!name || !company || !email || !message) {
-      return respond(false, locale, request);
+      return respond(false, locale, request, 'invalid_input');
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return respond(false, locale, request);
+      return respond(false, locale, request, 'invalid_input');
     }
 
     if (!env.RESEND_API_KEY || !env.CONTACT_TO_EMAIL) {
       console.error('Missing RESEND_API_KEY or CONTACT_TO_EMAIL');
-      return respond(false, locale, request);
+      return respond(false, locale, request, 'missing_config');
     }
 
     const from = env.CONTACT_FROM_EMAIL || 'PackRecommender <onboarding@resend.dev>';
@@ -76,13 +85,14 @@ export async function handleContactPost(request: Request, env: ContactEnv): Prom
     });
 
     if (!resendResponse.ok) {
-      console.error('Resend API error:', await resendResponse.text());
-      return respond(false, locale, request);
+      const resendError = await resendResponse.text();
+      console.error('Resend API error:', resendResponse.status, resendError);
+      return respond(false, locale, request, 'resend_failed');
     }
 
     return respond(true, locale, request);
   } catch (error) {
     console.error('Contact form error:', error);
-    return respond(false, locale, request);
+    return respond(false, locale, request, 'resend_failed');
   }
 }
