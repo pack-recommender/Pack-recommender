@@ -1,4 +1,4 @@
-interface Env {
+export interface ContactEnv {
   RESEND_API_KEY?: string;
   CONTACT_TO_EMAIL?: string;
   CONTACT_FROM_EMAIL?: string;
@@ -17,7 +17,7 @@ function redirect(path: string): Response {
   });
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export async function handleContactPost(request: Request, env: ContactEnv): Promise<Response> {
   let locale = 'en';
 
   try {
@@ -69,4 +69,4 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     console.error('Contact form error:', error);
     return redirect(getReturnPath(locale, 'error'));
   }
-};
+}

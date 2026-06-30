@@ -46,11 +46,11 @@ Preview the production build locally:
 npm run preview
 ```
 
-Test Cloudflare Functions locally (contact form + maintenance middleware):
+Test the Worker locally (static site + contact API + maintenance):
 
 ```bash
 npm run build
-npx wrangler pages dev dist
+npx wrangler dev
 ```
 
 Set secrets for local function testing in `.dev.vars` (gitignored):
@@ -73,15 +73,15 @@ src/
   styles/       # Global CSS and Tailwind
   utils/        # i18n content and SEO helpers
 public/         # Static files (favicon, robots.txt)
-functions/      # Cloudflare Pages Functions (contact API, maintenance)
-lib/            # Shared helpers for functions
+worker/         # Cloudflare Worker (contact API, maintenance gate)
+lib/            # Shared helpers for worker
 ```
 
 ## Contact Form
 
-The contact form POSTs to `/api/contact` (plain HTML form — no client JS). The Cloudflare Pages Function at `functions/api/contact.ts` sends email via [Resend](https://resend.com) and redirects back to `/#contact` with a success or error message.
+The contact form POSTs to `/api/contact` (plain HTML form — no client JS). The Cloudflare Worker at `worker/index.ts` sends email via [Resend](https://resend.com) and redirects back to `/#contact` with a success or error message.
 
-Required environment variables (set in Cloudflare Pages → Settings → Environment variables):
+Required environment variables (set in Cloudflare → your project → **Settings → Variables and secrets**):
 
 | Variable | Description |
 |----------|-------------|
@@ -96,35 +96,25 @@ Required environment variables (set in Cloudflare Pages → Settings → Environ
 3. Create an API key and add it to Cloudflare Pages env vars.
 4. Set `CONTACT_FROM_EMAIL` to an address on your verified domain.
 
-## Deploy to Cloudflare Pages
+## Deploy to Cloudflare Workers
 
-Hosting is **Cloudflare Pages only** — static `dist/` output plus `functions/` at the repo root. No Netlify or separate backend required.
+Hosting uses **Cloudflare Workers** (static Astro `dist/` + `worker/index.ts` for `/api/contact` and maintenance). Connect the GitHub repo via **Workers & Pages → Create → Import a repository**.
 
-### 1. Connect Git
-
-1. Push this repository to GitHub or GitLab.
-2. [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**.
-3. Select the repository.
-
-### 2. Build settings
+### Build settings (dashboard)
 
 | Setting | Value |
 |---------|--------|
 | Build command | `npm run build` |
-| Build output directory | `dist` |
-| Root directory | `/` |
+| **Deploy command** | `npx wrangler deploy` |
+| Path | `/` |
 
-Add environment variable:
+There is no **Build output directory** field in this UI — `wrangler.toml` sets `assets.directory = "./dist"`.
+
+Add build environment variable:
 
 | Variable | Value |
 |----------|--------|
 | `NODE_VERSION` | `20` |
-
-`wrangler.toml` in the repo root documents the same build settings. Newer Cloudflare Git UI has no **Build output directory** field in the dashboard — it uses `pages_build_output_dir = "./dist"` from `wrangler.toml` instead. Commit and push that file before deploying.
-
-### 3. Environment variables
-
-In **Pages → Settings → Environment variables** (Production):
 
 | Variable | Example | Notes |
 |----------|---------|--------|
@@ -136,25 +126,23 @@ In **Pages → Settings → Environment variables** (Production):
 
 Redeploy after changing variables.
 
-Cloudflare automatically detects `functions/` for `/api/*` routes and `_middleware.ts`.
-
-### 4. Custom domain
+### Custom domain
 
 1. Add your domain to Cloudflare DNS (update nameservers at your registrar if needed).
-2. Pages project → **Custom domains** → add `packrecommender.com` and `www.packrecommender.com`.
+2. Project → **Custom domains** → add `packrecommender.com` and `www.packrecommender.com`.
 3. Update `site` in `astro.config.mjs` if your production URL differs.
 
-### 5. Migrate from Netlify
+### Migrate from Netlify
 
 1. Deploy successfully on Cloudflare Pages first.
 2. In Cloudflare DNS, point `@` and `www` to the Pages project (auto-configured when adding custom domain).
 3. Disable or delete the Netlify site so DNS does not split traffic.
 
-### Option 2: Wrangler CLI
+### Wrangler CLI (manual deploy)
 
 ```bash
 npm run build
-npx wrangler pages deploy dist
+npx wrangler deploy
 ```
 
 ## Performance
