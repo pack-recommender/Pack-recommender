@@ -1,0 +1,82 @@
+---
+import { getImage, Image } from 'astro:assets';
+import Reveal from './Reveal.astro';
+import heroImage from '../assets/images/packages-main.png';
+import type { SiteContent } from '../utils/i18n';
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+
+const heroDesktop400 = await getImage({ src: heroImage, width: 400, format: 'webp', quality: 75 });
+const heroDesktop640 = await getImage({ src: heroImage, width: 640, format: 'webp', quality: 75 });
+---
+
+<section class="relative overflow-hidden pt-16" aria-labelledby="hero-heading">
+  <div class="absolute inset-0 grid-pattern" aria-hidden="true"></div>
+
+  <div class="absolute inset-y-0 end-0 hidden w-1/2 lg:block" aria-hidden="true">
+    <picture class="block h-full w-full">
+      <source
+        media="(min-width: 1024px)"
+        srcset={`${heroDesktop400.src} 400w, ${heroDesktop640.src} 640w`}
+        sizes="50vw"
+      />
+      <img
+        src={heroDesktop640.src}
+        alt=""
+        width={640}
+        height={640}
+        class="h-full w-full object-cover opacity-20"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
+    <div class="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent"></div>
+  </div>
+
+  <div class="section-container relative py-20 sm:py-28 lg:py-32">
+    <Reveal variant="up" class="max-w-2xl">
+      <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-border bg-white px-4 py-1.5 text-sm text-brand-muted shadow-sm">
+        <span class="h-2 w-2 rounded-full bg-green-500" aria-hidden="true"></span>
+        AI-Powered Packaging Intelligence
+      </div>
+
+      <h1 id="hero-heading" class="text-4xl font-bold tracking-tight text-brand sm:text-5xl lg:text-6xl">
+        {content.hero.title}
+      </h1>
+
+      <p class="mt-6 text-lg leading-relaxed text-brand-muted sm:text-xl">
+        {content.hero.subtitle}
+      </p>
+
+      <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+        <a href="#contact" class="btn-cta">
+          {content.hero.requestDemo}
+        </a>
+        <a href="#contact" class="btn-secondary">
+          {content.hero.contactSales}
+        </a>
+      </div>
+    </Reveal>
+
+    <div class="mt-16 lg:hidden">
+      <Image
+        src={heroImage}
+        alt="Packaging solutions visualization"
+        width={400}
+        height={400}
+        widths={[400, 600]}
+        sizes="(max-width: 1023px) calc(100vw - 2rem), 0px"
+        quality={76}
+        class="rounded-2xl shadow-card"
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,93 @@
+---
+import Reveal from './Reveal.astro';
+import type { SiteContent } from '../utils/i18n';
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+---
+
+<section id="contact" class="py-20 sm:py-28" aria-labelledby="contact-heading">
+  <div class="section-container">
+    <div class="mx-auto max-w-xl">
+      <Reveal variant="up" class="text-center">
+        <h2 id="contact-heading" class="section-heading">{content.contact.title}</h2>
+        <p class="section-subheading mx-auto">{content.contact.subtitle}</p>
+      </Reveal>
+
+      <Reveal variant="scale" delay={150}>
+      <form
+        action="/api/contact"
+        method="POST"
+        class="mt-12 space-y-6"
+        aria-label={content.contact.title}
+      >
+        <div>
+          <label for="name" class="block text-sm font-medium text-brand">
+            {content.contact.name}
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            autocomplete="name"
+            placeholder={content.contact.placeholders.name}
+            class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
+          />
+        </div>
+
+        <div>
+          <label for="company" class="block text-sm font-medium text-brand">
+            {content.contact.company}
+          </label>
+          <input
+            type="text"
+            id="company"
+            name="company"
+            required
+            autocomplete="organization"
+            placeholder={content.contact.placeholders.company}
+            class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
+          />
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-brand">
+            {content.contact.email}
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+            placeholder={content.contact.placeholders.email}
+            class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
+          />
+        </div>
+
+        <div>
+          <label for="message" class="block text-sm font-medium text-brand">
+            {content.contact.message}
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            required
+            placeholder={content.contact.placeholders.message}
+            class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn-cta w-full">
+          {content.contact.submit}
+        </button>
+      </form>
+      </Reveal>
+    </div>
+  </div>
+</section>

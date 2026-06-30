@@ -1,0 +1,147 @@
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/inter-v12-latin-300.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/inter-v12-latin-700.woff2') format('woff2');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply bg-white text-brand antialiased;
+    font-weight: 300;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
+  }
+
+  [dir='rtl'] {
+    text-align: right;
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-heading {
+    @apply text-3xl font-bold tracking-tight text-brand sm:text-4xl lg:text-5xl;
+  }
+
+  .section-subheading {
+    @apply mt-4 max-w-2xl text-lg text-brand-muted;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border border-brand-border bg-white px-6 py-3 text-sm font-medium text-brand transition-colors hover:bg-brand-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent;
+  }
+
+  .btn-cta {
+    @apply inline-flex items-center justify-center rounded-lg bg-brand-cta px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-cta-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
+  }
+
+  .card {
+    @apply rounded-2xl border border-brand-border bg-white p-6 shadow-card transition-shadow hover:shadow-card-hover;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand to-brand-accent bg-clip-text text-transparent;
+  }
+
+  .grid-pattern {
+    background-image:
+      linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+}
+
+@layer utilities {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  [data-reveal][data-reveal-variant='fade'] {
+    transform: none;
+  }
+
+  [data-reveal][data-reveal-variant='scale'] {
+    transform: scale(0.94);
+  }
+
+  [data-reveal][data-reveal-variant='slide'] {
+    transform: translateX(32px);
+  }
+
+  [dir='rtl'] [data-reveal][data-reveal-variant='slide'] {
+    transform: translateX(-32px);
+  }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-reveal-stagger] > [data-reveal]:nth-child(1) { --reveal-delay: 0ms; }
+  [data-reveal-stagger] > [data-reveal]:nth-child(2) { --reveal-delay: 90ms; }
+  [data-reveal-stagger] > [data-reveal]:nth-child(3) { --reveal-delay: 180ms; }
+  [data-reveal-stagger] > [data-reveal]:nth-child(4) { --reveal-delay: 270ms; }
+  [data-reveal-stagger] > [data-reveal]:nth-child(5) { --reveal-delay: 360ms; }
+  [data-reveal-stagger] > [data-reveal]:nth-child(6) { --reveal-delay: 450ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      will-change: auto;
+    }
+  }
+
+  .content-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+  }
+}
