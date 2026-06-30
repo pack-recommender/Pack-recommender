@@ -58,7 +58,7 @@ Set secrets for local function testing in `.dev.vars` (gitignored):
 ```
 RESEND_API_KEY=re_xxxxxxxx
 CONTACT_TO_EMAIL=you@example.com
-CONTACT_FROM_EMAIL=PackRecommender <onboarding@resend.dev>
+CONTACT_FROM_EMAIL=PackRecommender <info@packrecommender.com>
 MAINTENANCE_MODE=false
 ```
 
@@ -87,7 +87,7 @@ Required environment variables (set in Cloudflare → your project → **Setting
 |----------|-------------|
 | `RESEND_API_KEY` | API key from Resend dashboard |
 | `CONTACT_TO_EMAIL` | Inbox that receives submissions |
-| `CONTACT_FROM_EMAIL` | Optional. Verified sender, e.g. `PackRecommender <contact@packrecommender.com>`. Defaults to Resend sandbox address for testing. |
+| `CONTACT_FROM_EMAIL` | Sender address on your verified domain, e.g. `PackRecommender <info@packrecommender.com>`. |
 
 ### Resend setup
 
@@ -122,7 +122,7 @@ Add build environment variable:
 | `MAINTENANCE_MODE` | `false` | Set to `false` for live site; any other value enables maintenance gate |
 | `RESEND_API_KEY` | `re_...` | Contact form |
 | `CONTACT_TO_EMAIL` | `sales@packrecommender.com` | Contact form |
-| `CONTACT_FROM_EMAIL` | `PackRecommender <contact@packrecommender.com>` | Optional |
+| `CONTACT_FROM_EMAIL` | `PackRecommender <info@packrecommender.com>` | Optional |
 
 Redeploy after changing variables.
 

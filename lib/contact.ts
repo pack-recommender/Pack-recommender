@@ -67,7 +67,7 @@ export async function handleContactPost(request: Request, env: ContactEnv): Prom
       return respond(false, locale, request, 'missing_config');
     }
 
-    const from = env.CONTACT_FROM_EMAIL || 'PackRecommender <onboarding@resend.dev>';
+    const from = env.CONTACT_FROM_EMAIL || 'PackRecommender <info@packrecommender.com>';
 
     const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
