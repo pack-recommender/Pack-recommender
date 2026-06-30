@@ -84,6 +84,11 @@ export interface SiteContent {
     tagline: string;
     rights: string;
   };
+  maintenance: {
+    pageTitle: string;
+    heading: string;
+    imageAlt: string;
+  };
 }
 
 const en: SiteContent = {
@@ -289,6 +294,11 @@ const en: SiteContent = {
     tagline: 'AI-powered packaging recommendations for modern manufacturers.',
     rights: 'All rights reserved.',
   },
+  maintenance: {
+    pageTitle: 'Under Maintenance — PackRecommender',
+    heading: 'We are fastening some screws!',
+    imageAlt: 'Under maintenance',
+  },
 };
 
 const he: SiteContent = {
@@ -490,6 +500,11 @@ const he: SiteContent = {
     terms: 'תנאים',
     tagline: 'המלצות אריזה מבוססות AI ליצרנים מודרניים.',
     rights: 'כל הזכויות שמורות.',
+  },
+  maintenance: {
+    pageTitle: 'בתחזוקה — PackRecommender',
+    heading: 'אנחנו מהדקים כמה ברגים!',
+    imageAlt: 'האתר בתחזוקה',
   },
 };
 

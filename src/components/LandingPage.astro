@@ -13,6 +13,7 @@ import FAQ from '../components/FAQ.astro';
 import ContactForm from '../components/ContactForm.astro';
 import Footer from '../components/Footer.astro';
 import ScrollAnimations from '../components/ScrollAnimations.astro';
+import MaintenanceGuard from '../components/MaintenanceGuard.astro';
 import { getImage } from 'astro:assets';
 import heroImage from '../assets/images/packages-main.png';
 import { getContent, getLocalePath, type Locale } from '../utils/i18n';
@@ -74,4 +75,5 @@ const heroLcp640 = await getImage({ src: heroImage, width: 640, format: 'webp', 
   </main>
   <Footer locale={locale} content={content} />
   <ScrollAnimations />
+  <MaintenanceGuard />
 </BaseLayout>
