@@ -260,10 +260,10 @@
         </div>
     </div>
 
-    <div class="py-vh-5 w-100 overflow-hidden">
+    <div class="py-vh-5 w-100 overflow-hidden" id="contactus">
         <div class="container py-vh-3 border-top" data-aos="fade" data-aos-delay="200">
             <div class="row d-flex justify-content-center" [ngStyle]="{ direction: langService.dir }">
-                <div class="col-12 col-lg-8" id="contactus">
+                <div class="col-12 col-lg-8" >
                     <h2 class="display-5 text-center mb-4">{{ 'contact.title' | translate }}</h2>
 
                     <form [formGroup]="contactForm" (ngSubmit)="sendMessage()">
