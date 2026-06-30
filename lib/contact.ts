@@ -56,6 +56,14 @@ function parseResendError(body: string): string | undefined {
   }
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function parseContactToEmails(value: string | undefined): string[] {
+  if (!value) return [];
+
+  return [...new Set(value.split(',').map((entry) => entry.trim()).filter((entry) => EMAIL_RE.test(entry)))];
+}
+
 export async function handleContactPost(request: Request, env: ContactEnv): Promise<Response> {
   let locale = 'en';
 
@@ -76,7 +84,8 @@ export async function handleContactPost(request: Request, env: ContactEnv): Prom
       return respond(false, locale, request, 'invalid_input');
     }
 
-    if (!env.RESEND_API_KEY || !env.CONTACT_TO_EMAIL) {
+    const toEmails = parseContactToEmails(env.CONTACT_TO_EMAIL);
+    if (!env.RESEND_API_KEY || toEmails.length === 0) {
       console.error('Missing RESEND_API_KEY or CONTACT_TO_EMAIL');
       return respond(false, locale, request, 'missing_config');
     }
@@ -91,7 +100,7 @@ export async function handleContactPost(request: Request, env: ContactEnv): Prom
       },
       body: JSON.stringify({
         from,
-        to: [env.CONTACT_TO_EMAIL],
+        to: toEmails,
         reply_to: email,
         subject: `Contact form: ${name} from ${company}`,
         text: `Name: ${name}\nCompany: ${company}\nEmail: ${email}\n\n${message}`,

@@ -86,7 +86,7 @@ Required environment variables (set in Cloudflare → your project → **Setting
 | Variable | Description |
 |----------|-------------|
 | `RESEND_API_KEY` | API key from Resend dashboard |
-| `CONTACT_TO_EMAIL` | Inbox that receives submissions |
+| `CONTACT_TO_EMAIL` | Inbox(es) that receive submissions. Comma-separated for multiple, e.g. `a@example.com,b@example.com` |
 | `CONTACT_FROM_EMAIL` | Sender address on your verified domain, e.g. `PackRecommender <info@packrecommender.com>`. |
 
 ### Resend setup
