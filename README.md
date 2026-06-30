@@ -126,6 +126,15 @@ Add build environment variable:
 
 Redeploy after changing variables.
 
+Set the Resend API key as a **named** Worker secret (the name must be `RESEND_API_KEY`, not the key value):
+
+```bash
+npx wrangler secret put RESEND_API_KEY
+# paste your re_... key when prompted — do not put the key in the command
+```
+
+Non-secret contact settings are in `wrangler.toml` under `[vars]`.
+
 ### Custom domain
 
 1. Add your domain to Cloudflare DNS (update nameservers at your registrar if needed).

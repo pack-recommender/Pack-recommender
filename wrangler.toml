@@ -5,6 +5,11 @@ name = "pack-recommender"
 main = "worker/index.ts"
 compatibility_date = "2026-06-30"
 
+[vars]
+CONTACT_TO_EMAIL = "segalmc@gmail.com"
+CONTACT_FROM_EMAIL = "PackRecommender <onboarding@resend.dev>"
+MAINTENANCE_MODE = "false"
+
 [assets]
 directory = "./dist"
 binding = "ASSETS"
