@@ -7,6 +7,7 @@ import HowItWorks from '../components/HowItWorks.astro';
 import Features from '../components/Features.astro';
 import Benefits from '../components/Benefits.astro';
 import ProductPreview from '../components/ProductPreview.astro';
+import Gallery from '../components/Gallery.astro';
 import Testimonials from '../components/Testimonials.astro';
 import FAQ from '../components/FAQ.astro';
 import ContactForm from '../components/ContactForm.astro';
@@ -66,6 +67,7 @@ const heroLcp640 = await getImage({ src: heroImage, width: 640, format: 'webp', 
     <Features content={content} />
     <Benefits content={content} />
     <ProductPreview content={content} />
+    <Gallery content={content} />
     <Testimonials content={content} />
     <FAQ content={content} />
     <ContactForm content={content} />

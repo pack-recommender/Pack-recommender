@@ -10,6 +10,7 @@ export interface SiteContent {
     features: string;
     benefits: string;
     product: string;
+    gallery: string;
     testimonials: string;
     faq: string;
     contact: string;
@@ -45,6 +46,14 @@ export interface SiteContent {
     title: string;
     subtitle: string;
     stages: string[];
+  };
+  gallery: {
+    title: string;
+    subtitle: string;
+    prevSlide: string;
+    nextSlide: string;
+    goToSlide: string;
+    items: { alt: string }[];
   };
   testimonials: {
     title: string;
@@ -88,6 +97,7 @@ const en: SiteContent = {
     features: 'Features',
     benefits: 'Benefits',
     product: 'Product',
+    gallery: 'Gallery',
     testimonials: 'Testimonials',
     faq: 'FAQ',
     contact: 'Contact',
@@ -181,6 +191,20 @@ const en: SiteContent = {
       'Recommended Packaging',
       'Cost Analysis',
       'Sustainability Score',
+    ],
+  },
+  gallery: {
+    title: 'Packaging in practice',
+    subtitle: 'Real-world packaging solutions across industries and materials.',
+    prevSlide: 'Previous slide',
+    nextSlide: 'Next slide',
+    goToSlide: 'Go to slide',
+    items: [
+      { alt: 'Custom printed corrugated packaging boxes' },
+      { alt: 'Industrial packaging production facility' },
+      { alt: 'Sustainable flexible pouch packaging' },
+      { alt: 'Retail product packaging display' },
+      { alt: 'Corrugated shipping and logistics packaging' },
     ],
   },
   testimonials: {
@@ -278,6 +302,7 @@ const he: SiteContent = {
     features: 'יכולות',
     benefits: 'יתרונות',
     product: 'מוצר',
+    gallery: 'גלריה',
     testimonials: 'המלצות',
     faq: 'שאלות נפוצות',
     contact: 'צור קשר',
@@ -368,6 +393,20 @@ const he: SiteContent = {
       'אריזה מומלצת',
       'ניתוח עלויות',
       'ציון קיימות',
+    ],
+  },
+  gallery: {
+    title: 'אריזה בשטח',
+    subtitle: 'פתרונות אריזה מהעולם האמיתי בתעשיות וחומרים שונים.',
+    prevSlide: 'שקופית קודמת',
+    nextSlide: 'שקופית הבאה',
+    goToSlide: 'עבור לשקופית',
+    items: [
+      { alt: 'קרטונים מודפסים בהתאמה אישית' },
+      { alt: 'מתקן ייצור אריזה תעשייתי' },
+      { alt: 'אריזת שקית גמישה בת קיימא' },
+      { alt: 'תצוגת אריזת מוצר לקמעונאות' },
+      { alt: 'אריזות משלוח ולוגיסטיקה מקרטון' },
     ],
   },
   testimonials: {
