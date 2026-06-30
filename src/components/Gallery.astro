@@ -271,6 +271,10 @@ const intervalMs = 5000;
     height: 1.25rem;
   }
 
+  [dir='rtl'] .gallery-nav svg {
+    transform: scaleX(-1);
+  }
+
   .gallery-nav--prev {
     inset-inline-start: 0.75rem;
   }
@@ -561,15 +565,17 @@ const intervalMs = 5000;
         if (!root.contains(event.relatedTarget as Node)) resume();
       });
 
+      const isRtl = document.documentElement.dir === 'rtl';
+
       root.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') {
           event.preventDefault();
-          setSlide(index - 1);
+          setSlide(isRtl ? index + 1 : index - 1);
           stopTimer();
           startTimer();
         } else if (event.key === 'ArrowRight') {
           event.preventDefault();
-          setSlide(index + 1);
+          setSlide(isRtl ? index - 1 : index + 1);
           stopTimer();
           startTimer();
         }
