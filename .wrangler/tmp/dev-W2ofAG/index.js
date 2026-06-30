@@ -20,17 +20,27 @@ function redirect(path) {
   });
 }
 __name(redirect, "redirect");
-function jsonResponse(success, error) {
-  return new Response(JSON.stringify(success ? { success: true } : { success: false, error }), {
+function jsonResponse(success, error, detail) {
+  const body = success ? { success: true } : { success: false, error, ...detail ? { detail } : {} };
+  return new Response(JSON.stringify(body), {
     status: success ? 200 : 422,
     headers: { "Content-Type": "application/json" }
   });
 }
 __name(jsonResponse, "jsonResponse");
-function respond(success, locale, request, error) {
-  return wantsJson(request) ? jsonResponse(success, error) : redirect(getReturnPath(locale, success ? "sent" : "error"));
+function respond(success, locale, request, error, detail) {
+  return wantsJson(request) ? jsonResponse(success, error, detail) : redirect(getReturnPath(locale, success ? "sent" : "error"));
 }
 __name(respond, "respond");
+function parseResendError(body) {
+  try {
+    const parsed = JSON.parse(body);
+    return parsed.message;
+  } catch {
+    return void 0;
+  }
+}
+__name(parseResendError, "parseResendError");
 async function handleContactPost(request, env) {
   let locale = "en";
   try {
@@ -71,8 +81,9 @@ ${message}`
     });
     if (!resendResponse.ok) {
       const resendError = await resendResponse.text();
+      const detail = parseResendError(resendError);
       console.error("Resend API error:", resendResponse.status, resendError);
-      return respond(false, locale, request, "resend_failed");
+      return respond(false, locale, request, "resend_failed", detail);
     }
     return respond(true, locale, request);
   } catch (error) {
