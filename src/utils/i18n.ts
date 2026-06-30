@@ -71,6 +71,8 @@ export interface SiteContent {
     email: string;
     message: string;
     submit: string;
+    success: string;
+    error: string;
     placeholders: {
       name: string;
       company: string;
@@ -281,6 +283,8 @@ const en: SiteContent = {
     email: 'Email',
     message: 'Message',
     submit: 'Send message',
+    success: 'Thank you! Your message has been sent. We will be in touch soon.',
+    error: 'Something went wrong. Please try again or email us directly.',
     placeholders: {
       name: 'Your name',
       company: 'Your company',
@@ -488,6 +492,8 @@ const he: SiteContent = {
     email: 'אימייל',
     message: 'הודעה',
     submit: 'שלח הודעה',
+    success: 'תודה! ההודעה נשלחה. ניצור איתכם קשר בהקדם.',
+    error: 'משהו השתבש. נסו שוב או שלחו לנו אימייל ישירות.',
     placeholders: {
       name: 'השם שלך',
       company: 'שם החברה',

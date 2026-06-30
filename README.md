@@ -46,6 +46,22 @@ Preview the production build locally:
 npm run preview
 ```
 
+Test Cloudflare Functions locally (contact form + maintenance middleware):
+
+```bash
+npm run build
+npx wrangler pages dev dist
+```
+
+Set secrets for local function testing in `.dev.vars` (gitignored):
+
+```
+RESEND_API_KEY=re_xxxxxxxx
+CONTACT_TO_EMAIL=you@example.com
+CONTACT_FROM_EMAIL=PackRecommender <onboarding@resend.dev>
+MAINTENANCE_MODE=false
+```
+
 ## Project Structure
 
 ```
@@ -57,44 +73,89 @@ src/
   styles/       # Global CSS and Tailwind
   utils/        # i18n content and SEO helpers
 public/         # Static files (favicon, robots.txt)
-functions/      # Cloudflare Pages Functions (contact API)
+functions/      # Cloudflare Pages Functions (contact API, maintenance)
+lib/            # Shared helpers for functions
 ```
 
 ## Contact Form
 
-The contact form POSTs to `/api/contact`. A placeholder Cloudflare Pages Function is included at `functions/api/contact.ts`. Replace it with your email service or CRM integration.
+The contact form POSTs to `/api/contact` (plain HTML form — no client JS). The Cloudflare Pages Function at `functions/api/contact.ts` sends email via [Resend](https://resend.com) and redirects back to `/#contact` with a success or error message.
+
+Required environment variables (set in Cloudflare Pages → Settings → Environment variables):
+
+| Variable | Description |
+|----------|-------------|
+| `RESEND_API_KEY` | API key from Resend dashboard |
+| `CONTACT_TO_EMAIL` | Inbox that receives submissions |
+| `CONTACT_FROM_EMAIL` | Optional. Verified sender, e.g. `PackRecommender <contact@packrecommender.com>`. Defaults to Resend sandbox address for testing. |
+
+### Resend setup
+
+1. Create a free account at [resend.com](https://resend.com).
+2. Add and verify your domain (add DNS records in Cloudflare).
+3. Create an API key and add it to Cloudflare Pages env vars.
+4. Set `CONTACT_FROM_EMAIL` to an address on your verified domain.
 
 ## Deploy to Cloudflare Pages
 
-### Option 1: Dashboard
+Hosting is **Cloudflare Pages only** — static `dist/` output plus `functions/` at the repo root. No Netlify or separate backend required.
+
+### 1. Connect Git
 
 1. Push this repository to GitHub or GitLab.
-2. In [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
+2. [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**.
 3. Select the repository.
-4. Configure build settings:
-   - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-   - **Node.js version:** 18 or later
-5. Deploy.
 
-Cloudflare automatically detects `functions/` for serverless API routes.
+### 2. Build settings
+
+| Setting | Value |
+|---------|--------|
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | `/` |
+
+Add environment variable:
+
+| Variable | Value |
+|----------|--------|
+| `NODE_VERSION` | `20` |
+
+`wrangler.toml` in the repo root documents the same build settings. Newer Cloudflare Git UI has no **Build output directory** field in the dashboard — it uses `pages_build_output_dir = "./dist"` from `wrangler.toml` instead. Commit and push that file before deploying.
+
+### 3. Environment variables
+
+In **Pages → Settings → Environment variables** (Production):
+
+| Variable | Example | Notes |
+|----------|---------|--------|
+| `NODE_VERSION` | `20` | Build-time |
+| `MAINTENANCE_MODE` | `false` | Set to `false` for live site; any other value enables maintenance gate |
+| `RESEND_API_KEY` | `re_...` | Contact form |
+| `CONTACT_TO_EMAIL` | `sales@packrecommender.com` | Contact form |
+| `CONTACT_FROM_EMAIL` | `PackRecommender <contact@packrecommender.com>` | Optional |
+
+Redeploy after changing variables.
+
+Cloudflare automatically detects `functions/` for `/api/*` routes and `_middleware.ts`.
+
+### 4. Custom domain
+
+1. Add your domain to Cloudflare DNS (update nameservers at your registrar if needed).
+2. Pages project → **Custom domains** → add `packrecommender.com` and `www.packrecommender.com`.
+3. Update `site` in `astro.config.mjs` if your production URL differs.
+
+### 5. Migrate from Netlify
+
+1. Deploy successfully on Cloudflare Pages first.
+2. In Cloudflare DNS, point `@` and `www` to the Pages project (auto-configured when adding custom domain).
+3. Disable or delete the Netlify site so DNS does not split traffic.
 
 ### Option 2: Wrangler CLI
 
 ```bash
-npm install -g wrangler
+npm run build
 npx wrangler pages deploy dist
 ```
-
-### Custom Domain
-
-In Cloudflare Pages → your project → **Custom domains**, add `packrecommender.com` and follow DNS instructions.
-
-Update `site` in `astro.config.mjs` if your production URL differs.
-
-## Environment
-
-No environment variables are required for the static site. Add secrets in Cloudflare Pages for contact form integrations (e.g. email API keys).
 
 ## Performance
 
