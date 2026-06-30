@@ -20,97 +20,275 @@ const error = Astro.url.searchParams.get('error') === '1';
         <p class="section-subheading mx-auto">{content.contact.subtitle}</p>
       </Reveal>
 
-      {sent && (
-        <p
-          role="status"
-          class="mt-8 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-center text-sm text-green-800"
-        >
-          {content.contact.success}
-        </p>
-      )}
-
-      {error && (
-        <p
-          role="alert"
-          class="mt-8 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-800"
-        >
-          {content.contact.error}
-        </p>
-      )}
-
       <Reveal variant="scale" delay={150}>
-      <form
-        action="/api/contact"
-        method="POST"
-        class="mt-12 space-y-6"
-        aria-label={content.contact.title}
-      >
-        <input type="hidden" name="locale" value={locale} />
+        <div class="mt-12" data-contact-root>
+          <noscript>
+            {sent && (
+              <p
+                role="status"
+                class="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-center text-sm text-green-800"
+              >
+                {content.contact.success}
+              </p>
+            )}
+            {error && (
+              <p
+                role="alert"
+                class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-800"
+              >
+                {content.contact.error}
+              </p>
+            )}
+          </noscript>
 
-        <div>
-          <label for="name" class="block text-sm font-medium text-brand">
-            {content.contact.name}
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            autocomplete="name"
-            placeholder={content.contact.placeholders.name}
-            class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
-          />
+          <div data-contact-form-panel class:list={[{ hidden: sent }]}>
+            <p
+              data-contact-error
+              role="alert"
+              class="mb-6 hidden rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-800"
+            >
+              {content.contact.error}
+            </p>
+
+            <form
+              action="/api/contact"
+              method="POST"
+              class="space-y-6"
+              aria-label={content.contact.title}
+              data-contact-form
+            >
+              <input type="hidden" name="locale" value={locale} />
+
+              <div>
+                <label for="contact-name" class="block text-sm font-medium text-brand">
+                  {content.contact.name}
+                </label>
+                <input
+                  type="text"
+                  id="contact-name"
+                  name="name"
+                  required
+                  autocomplete="name"
+                  placeholder={content.contact.placeholders.name}
+                  class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
+                />
+              </div>
+
+              <div>
+                <label for="contact-company" class="block text-sm font-medium text-brand">
+                  {content.contact.company}
+                </label>
+                <input
+                  type="text"
+                  id="contact-company"
+                  name="company"
+                  required
+                  autocomplete="organization"
+                  placeholder={content.contact.placeholders.company}
+                  class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
+                />
+              </div>
+
+              <div>
+                <label for="contact-email" class="block text-sm font-medium text-brand">
+                  {content.contact.email}
+                </label>
+                <input
+                  type="email"
+                  id="contact-email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                  placeholder={content.contact.placeholders.email}
+                  class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
+                />
+              </div>
+
+              <div>
+                <label for="contact-message" class="block text-sm font-medium text-brand">
+                  {content.contact.message}
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows="4"
+                  required
+                  placeholder={content.contact.placeholders.message}
+                  class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn-cta w-full gap-2" data-contact-submit>
+                <span data-contact-submit-label>{content.contact.submit}</span>
+                <svg
+                  data-contact-spinner
+                  class="hidden h-5 w-5 animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <div
+            data-contact-success-panel
+            role="status"
+            class:list={[
+              'flex flex-col items-center rounded-2xl border border-green-200 bg-green-50 px-8 py-12 text-center',
+              { hidden: !sent },
+            ]}
+          >
+            <div
+              class="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600"
+              aria-hidden="true"
+            >
+              <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+              </svg>
+            </div>
+            <p class="mt-6 text-lg font-medium text-green-900" data-contact-success-text>
+              {content.contact.success}
+            </p>
+          </div>
         </div>
-
-        <div>
-          <label for="company" class="block text-sm font-medium text-brand">
-            {content.contact.company}
-          </label>
-          <input
-            type="text"
-            id="company"
-            name="company"
-            required
-            autocomplete="organization"
-            placeholder={content.contact.placeholders.company}
-            class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
-          />
-        </div>
-
-        <div>
-          <label for="email" class="block text-sm font-medium text-brand">
-            {content.contact.email}
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            autocomplete="email"
-            placeholder={content.contact.placeholders.email}
-            class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
-          />
-        </div>
-
-        <div>
-          <label for="message" class="block text-sm font-medium text-brand">
-            {content.contact.message}
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows="4"
-            required
-            placeholder={content.contact.placeholders.message}
-            class="mt-2 block w-full rounded-lg border border-brand-border bg-white px-4 py-3 text-brand shadow-sm transition-colors placeholder:text-neutral-500 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
-          ></textarea>
-        </div>
-
-        <button type="submit" class="btn-cta w-full">
-          {content.contact.submit}
-        </button>
-      </form>
       </Reveal>
     </div>
   </div>
 </section>
+
+<script
+  define:vars={{
+    successMessage: content.contact.success,
+    errorMessage: content.contact.error,
+    sendingLabel: content.contact.sending,
+    submitText: content.contact.submit,
+    initialSent: sent,
+    initialError: error,
+  }}
+>
+  function initContactForm() {
+    const root = document.querySelector('[data-contact-root]');
+    if (!root) return;
+
+    const formPanel = root.querySelector('[data-contact-form-panel]');
+    const successPanel = root.querySelector('[data-contact-success-panel]');
+    const form = root.querySelector('[data-contact-form]');
+    const errorEl = root.querySelector('[data-contact-error]');
+    const submitBtn = root.querySelector('[data-contact-submit]');
+    const submitLabelEl = root.querySelector('[data-contact-submit-label]');
+    const spinner = root.querySelector('[data-contact-spinner]');
+
+    if (!(formPanel instanceof HTMLElement && successPanel instanceof HTMLElement && form instanceof HTMLFormElement)) {
+      return;
+    }
+
+    function showSuccess() {
+      formPanel.classList.add('hidden');
+      successPanel.classList.remove('hidden');
+      successPanel.classList.add('contact-success-enter');
+      if (errorEl instanceof HTMLElement) {
+        errorEl.classList.add('hidden');
+      }
+    }
+
+    function showError() {
+      if (errorEl instanceof HTMLElement) {
+        errorEl.classList.remove('hidden');
+      }
+    }
+
+    function setLoading(loading) {
+      if (!(submitBtn instanceof HTMLButtonElement)) return;
+      submitBtn.disabled = loading;
+      form.querySelectorAll('input, textarea').forEach((field) => {
+        if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) {
+          field.disabled = loading;
+        }
+      });
+      if (submitLabelEl instanceof HTMLElement) {
+        submitLabelEl.textContent = loading ? sendingLabel : submitText;
+      }
+      if (spinner instanceof SVGElement) {
+        spinner.classList.toggle('hidden', !loading);
+      }
+    }
+
+    if (initialSent) {
+      showSuccess();
+      const url = new URL(window.location.href);
+      if (url.searchParams.has('sent') || url.searchParams.has('error')) {
+        url.searchParams.delete('sent');
+        url.searchParams.delete('error');
+        const next = url.pathname + (url.search || '') + url.hash;
+        window.history.replaceState({}, '', next || url.pathname + '#contact');
+      }
+    } else if (initialError) {
+      showError();
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (errorEl instanceof HTMLElement) {
+        errorEl.classList.add('hidden');
+      }
+      setLoading(true);
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+
+        const data = await response.json().catch(() => ({ success: false }));
+
+        if (response.ok && data.success) {
+          showSuccess();
+          return;
+        }
+
+        showError();
+      } catch {
+        showError();
+      } finally {
+        setLoading(false);
+      }
+    });
+  }
+
+  initContactForm();
+  document.addEventListener('astro:page-load', initContactForm);
+</script>
+
+<style>
+  .contact-success-enter {
+    animation: contact-success-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes contact-success-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-success-enter {
+      animation: none;
+    }
+  }
+</style>

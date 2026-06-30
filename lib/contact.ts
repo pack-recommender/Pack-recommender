@@ -10,11 +10,27 @@ function getReturnPath(locale: string, status: 'sent' | 'error'): string {
   return `${base}?${param}#contact`;
 }
 
+function wantsJson(request: Request): boolean {
+  const accept = request.headers.get('Accept') || '';
+  return accept.includes('application/json');
+}
+
 function redirect(path: string): Response {
   return new Response(null, {
     status: 303,
     headers: { Location: path },
   });
+}
+
+function jsonResponse(success: boolean): Response {
+  return new Response(JSON.stringify({ success }), {
+    status: success ? 200 : 422,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+function respond(success: boolean, locale: string, request: Request): Response {
+  return wantsJson(request) ? jsonResponse(success) : redirect(getReturnPath(locale, success ? 'sent' : 'error'));
 }
 
 export async function handleContactPost(request: Request, env: ContactEnv): Promise<Response> {
@@ -30,16 +46,16 @@ export async function handleContactPost(request: Request, env: ContactEnv): Prom
     const message = String(formData.get('message') || '').trim().slice(0, 5000);
 
     if (!name || !company || !email || !message) {
-      return redirect(getReturnPath(locale, 'error'));
+      return respond(false, locale, request);
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return redirect(getReturnPath(locale, 'error'));
+      return respond(false, locale, request);
     }
 
     if (!env.RESEND_API_KEY || !env.CONTACT_TO_EMAIL) {
       console.error('Missing RESEND_API_KEY or CONTACT_TO_EMAIL');
-      return redirect(getReturnPath(locale, 'error'));
+      return respond(false, locale, request);
     }
 
     const from = env.CONTACT_FROM_EMAIL || 'PackRecommender <onboarding@resend.dev>';
@@ -61,12 +77,12 @@ export async function handleContactPost(request: Request, env: ContactEnv): Prom
 
     if (!resendResponse.ok) {
       console.error('Resend API error:', await resendResponse.text());
-      return redirect(getReturnPath(locale, 'error'));
+      return respond(false, locale, request);
     }
 
-    return redirect(getReturnPath(locale, 'sent'));
+    return respond(true, locale, request);
   } catch (error) {
     console.error('Contact form error:', error);
-    return redirect(getReturnPath(locale, 'error'));
+    return respond(false, locale, request);
   }
 }
