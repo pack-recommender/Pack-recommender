@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import TrustedBy from '../components/TrustedBy.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Features from '../components/Features.astro';
+import Benefits from '../components/Benefits.astro';
+import ProductPreview from '../components/ProductPreview.astro';
+import Gallery from '../components/Gallery.astro';
+import Testimonials from '../components/Testimonials.astro';
+import FAQ from '../components/FAQ.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Footer from '../components/Footer.astro';
+import ScrollAnimations from '../components/ScrollAnimations.astro';
+import MaintenanceGuard from '../components/MaintenanceGuard.astro';
+import { getImage } from 'astro:assets';
+import heroImage from '../assets/images/packages-main.png';
+import { getContent, getLocalePath, type Locale } from '../utils/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const content = getContent(locale);
+const path = getLocalePath(locale);
+
+const heroLcp400 = await getImage({ src: heroImage, width: 400, format: 'webp', quality: 78 });
+const heroLcp600 = await getImage({ src: heroImage, width: 600, format: 'webp', quality: 76 });
+const heroLcp640 = await getImage({ src: heroImage, width: 640, format: 'webp', quality: 75 });
+---
+
+<BaseLayout
+  title={content.meta.title}
+  description={content.meta.description}
+  locale={locale}
+  path={path}
+>
+  <Fragment slot="head">
+    <link rel="preload" href="/fonts/inter-v12-latin-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-v12-latin-300.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      as="image"
+      href={heroLcp600.src}
+      imagesrcset={`${heroLcp400.src} 400w, ${heroLcp600.src} 600w`}
+      imagesizes="(max-width: 1023px) calc(100vw - 2rem)"
+      media="(max-width: 1023px)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href={heroLcp640.src}
+      imagesrcset={`${heroLcp400.src} 400w, ${heroLcp640.src} 640w`}
+      imagesizes="50vw"
+      media="(min-width: 1024px)"
+      fetchpriority="high"
+    />
+  </Fragment>
+
+  <Header locale={locale} content={content} />
+  <main id="main-content" class="flex-1">
+    <Hero content={content} />
+    <TrustedBy content={content} />
+    <HowItWorks content={content} />
+    <Features content={content} />
+    <Benefits content={content} />
+    <ProductPreview content={content} />
+    <Gallery content={content} />
+    <Testimonials content={content} />
+    <FAQ content={content} />
+    <ContactForm content={content} locale={locale} />
+  </main>
+  <Footer locale={locale} content={content} />
+  <ScrollAnimations />
+  <MaintenanceGuard />
+</BaseLayout>

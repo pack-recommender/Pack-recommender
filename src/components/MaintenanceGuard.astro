@@ -1,0 +1,53 @@
+---
+import {
+  BYPASS_QUERY_PARAM,
+  BYPASS_STORAGE_KEY,
+  MAINTENANCE_MODE,
+} from '../utils/maintenance';
+---
+
+{
+  MAINTENANCE_MODE && (
+    <script
+      define:vars={{
+        bypassKey: BYPASS_STORAGE_KEY,
+        bypassParam: BYPASS_QUERY_PARAM,
+      }}
+    >
+      function getTodayBypassCode() {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        return `${day}${month}${year}`;
+      }
+
+      function isMaintenancePath(pathname) {
+        return pathname === '/maintenance' || pathname === '/he/maintenance';
+      }
+
+      function getMaintenancePath(pathname) {
+        return pathname.startsWith('/he') ? '/he/maintenance' : '/maintenance';
+      }
+
+      function enforceMaintenanceMode() {
+        const { pathname, search } = window.location;
+        if (isMaintenancePath(pathname)) return;
+
+        const params = new URLSearchParams(search);
+        const queryTest = params.get(bypassParam);
+        if (queryTest) {
+          localStorage.setItem(bypassKey, queryTest);
+        }
+
+        const testValue = queryTest || localStorage.getItem(bypassKey) || '';
+        if (testValue && testValue === getTodayBypassCode()) return;
+
+        window.location.replace(getMaintenancePath(pathname));
+      }
+
+      enforceMaintenanceMode();
+      document.addEventListener('astro:page-load', enforceMaintenanceMode);
+    </script>
+  )
+}

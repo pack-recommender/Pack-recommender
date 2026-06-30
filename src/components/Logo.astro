@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/images/logo.png';
+
+interface Props {
+  size?: 'sm' | 'md';
+  alt?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const { size = 'md', alt = 'PackRecommender', loading = 'eager' } = Astro.props;
+
+const sizes = {
+  md: { width: 78, height: 32, widths: [78, 156] as number[], sizes: '78px', class: 'h-8 w-auto' },
+  sm: { width: 68, height: 28, widths: [68, 136] as number[], sizes: '68px', class: 'h-7 w-auto' },
+};
+
+const config = sizes[size];
+---
+
+<Image
+  src={logo}
+  alt={alt}
+  width={config.width}
+  height={config.height}
+  widths={config.widths}
+  sizes={config.sizes}
+  class={config.class}
+  loading={loading}
+  decoding="async"
+/>

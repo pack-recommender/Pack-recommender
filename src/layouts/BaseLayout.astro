@@ -1,0 +1,78 @@
+---
+import '../styles/global.css';
+import type { Locale } from '../utils/i18n';
+import { getDir } from '../utils/i18n';
+import { getCanonicalUrl, getAlternateUrls, getOrganizationSchema, getOgImageUrl } from '../utils/seo';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  path: string;
+}
+
+const { title, description, locale, path } = Astro.props;
+const dir = getDir(locale);
+const canonical = getCanonicalUrl(path);
+const alternates = getAlternateUrls();
+const ogImage = getOgImageUrl();
+const schema = getOrganizationSchema();
+---
+
+<!doctype html>
+<html lang={locale} dir={dir}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    {alternates.map(({ locale: altLocale, url }) => (
+      <link rel="alternate" hreflang={altLocale} href={url} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={getCanonicalUrl('/')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={locale === 'he' ? 'he_IL' : 'en_US'} />
+    <meta property="og:site_name" content="PackRecommender" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+    <slot name="head" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-brand focus:px-4 focus:py-2 focus:text-white"
+    >
+      {locale === 'he' ? 'דלג לתוכן' : 'Skip to content'}
+    </a>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>

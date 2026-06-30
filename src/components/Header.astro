@@ -1,0 +1,100 @@
+---
+import Logo from '../components/Logo.astro';
+import type { Locale, SiteContent } from '../utils/i18n';
+import { getLocalePath } from '../utils/i18n';
+
+interface Props {
+  locale: Locale;
+  content: SiteContent;
+}
+
+const { locale, content } = Astro.props;
+const otherLocale = locale === 'en' ? 'he' : 'en';
+const otherLabel = locale === 'en' ? 'עברית' : 'EN';
+
+const navLinks = [
+  { href: '#how-it-works', label: content.nav.howItWorks },
+  { href: '#features', label: content.nav.features },
+  { href: '#benefits', label: content.nav.benefits },
+  { href: '#product', label: content.nav.product },
+  { href: '#gallery', label: content.nav.gallery },
+  { href: '#testimonials', label: content.nav.testimonials },
+  { href: '#faq', label: content.nav.faq },
+  { href: '#contact', label: content.nav.contact },
+];
+---
+
+<header class="fixed inset-x-0 top-0 z-50 border-b border-brand-border/60 bg-white/95">
+  <nav class="section-container flex h-16 items-center justify-between" aria-label="Main navigation">
+    <a href={getLocalePath(locale)} class="flex items-center gap-2.5 focus-visible:rounded-lg">
+      <Logo size="md" />
+      <span class="text-lg font-bold text-brand">PackRecommender</span>
+    </a>
+
+    <ul class="hidden items-center gap-1 lg:flex" role="list">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="rounded-lg px-3 py-2 text-sm text-brand-muted transition-colors hover:text-brand"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={getLocalePath(otherLocale)}
+        class="hidden rounded-lg px-3 py-2 text-sm font-medium text-brand-muted transition-colors hover:text-brand sm:inline-flex"
+        hreflang={otherLocale}
+        aria-label={locale === 'en' ? 'Switch to Hebrew' : 'Switch to English'}
+      >
+        {otherLabel}
+      </a>
+      <a href="#contact" class="btn-primary hidden sm:inline-flex">
+        {content.nav.requestDemo}
+      </a>
+
+      <details class="relative lg:hidden">
+        <summary class="inline-flex cursor-pointer list-none items-center justify-center rounded-lg p-2 text-brand marker:content-none [&::-webkit-details-marker]:hidden">
+          <span class="sr-only">Toggle menu</span>
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </summary>
+        <div class="absolute end-0 top-full mt-1 w-56 rounded-xl border border-brand-border bg-white py-2 shadow-card">
+          <ul role="list">
+            {navLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="block px-4 py-2 text-sm text-brand-muted hover:bg-brand-surface hover:text-brand"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+            <li class="border-t border-brand-border mt-1 pt-1">
+              <a href={getLocalePath(otherLocale)} class="block px-4 py-2 text-sm font-medium text-brand-muted" hreflang={otherLocale}>
+                {otherLabel}
+              </a>
+            </li>
+            <li class="px-4 py-2">
+              <a href="#contact" class="btn-primary block text-center">
+                {content.nav.requestDemo}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </nav>
+</header>
+
+<style>
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

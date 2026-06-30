@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets';
+import Reveal from './Reveal.astro';
+import gallery1 from '../assets/images/gallery1.png';
+import type { SiteContent } from '../utils/i18n';
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+---
+
+<section id="product" class="bg-brand py-20 text-white sm:py-28" aria-labelledby="product-heading">
+  <div class="section-container">
+    <Reveal variant="up" class="mx-auto max-w-2xl text-center">
+      <h2 id="product-heading" class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+        {content.product.title}
+      </h2>
+      <p class="mt-4 text-lg text-neutral-300">{content.product.subtitle}</p>
+    </Reveal>
+
+    <Reveal variant="scale" delay={120} class="mt-16 overflow-hidden rounded-2xl border border-white/20 bg-neutral-900 shadow-glow">
+      <div class="flex items-center gap-2 border-b border-white/20 px-4 py-3" aria-hidden="true">
+        <span class="h-3 w-3 rounded-full bg-red-400"></span>
+        <span class="h-3 w-3 rounded-full bg-yellow-400"></span>
+        <span class="h-3 w-3 rounded-full bg-green-400"></span>
+        <span class="ms-4 text-xs text-neutral-300">PackRecommender Dashboard</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-2 border-b border-white/20 px-4 py-4 sm:gap-0 sm:px-6">
+        {content.product.stages.map((stage, i) => (
+          <>
+            <div class="flex items-center gap-2 rounded-lg bg-white/15 px-3 py-2 text-xs font-bold text-white sm:text-sm">
+              <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand-accent text-xs font-bold text-white">
+                {i + 1}
+              </span>
+              {stage}
+            </div>
+            {i < content.product.stages.length - 1 && (
+              <svg class="hidden h-4 w-4 text-neutral-400 sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            )}
+          </>
+        ))}
+      </div>
+
+      <div class="grid gap-4 p-4 sm:grid-cols-3 sm:p-6">
+        <div class="rounded-xl border border-white/10 bg-neutral-800 p-4">
+          <h3 class="mb-3 text-sm font-bold text-neutral-200">Product Input</h3>
+          <div class="space-y-2" aria-hidden="true">
+            <div class="h-8 rounded bg-white/15"></div>
+            <div class="h-8 w-3/4 rounded bg-white/15"></div>
+            <div class="grid grid-cols-2 gap-2">
+              <div class="h-8 rounded bg-white/15"></div>
+              <div class="h-8 rounded bg-white/15"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-neutral-800 p-4">
+          <h3 class="mb-3 text-sm font-bold text-neutral-200">AI Engine</h3>
+          <div class="flex items-center justify-center py-6" aria-hidden="true">
+            <div class="relative">
+              <div class="h-20 w-20 rounded-full border-2 border-blue-400 animate-pulse-soft"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <svg class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-neutral-800 p-4">
+          <h3 class="mb-3 text-sm font-bold text-neutral-200">Results</h3>
+          <div class="relative mb-3 aspect-video overflow-hidden rounded-lg">
+            <Image
+              src={gallery1}
+              alt="Recommended packaging"
+              widths={[200, 400]}
+              sizes="(max-width: 640px) 100vw, 200px"
+              class="h-full w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div class="flex items-center justify-between text-xs font-medium">
+            <span class="text-green-300">Cost: -22%</span>
+            <span class="text-blue-300">Sustainability: A+</span>
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  </div>
+</section>

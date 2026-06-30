@@ -1,0 +1,88 @@
+---
+import type { Locale } from '../utils/i18n';
+import { getContent, getDir } from '../utils/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const content = getContent(locale);
+const dir = getDir(locale);
+---
+
+<!doctype html>
+<html lang={locale} dir={dir}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{content.maintenance.pageTitle}</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  </head>
+  <body class="maintenance-body">
+    <main class="maintenance-container">
+      <img
+        src="/img/under-maintenance.gif"
+        alt={content.maintenance.imageAlt}
+        class="maintenance-image"
+        width="640"
+        height="480"
+        decoding="async"
+      />
+      <h1 class="maintenance-heading">{content.maintenance.heading}</h1>
+    </main>
+  </body>
+</html>
+
+<style>
+  .maintenance-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1.25rem;
+    box-sizing: border-box;
+    background: #f4f4f8;
+    font-family: Inter, system-ui, -apple-system, sans-serif;
+    text-align: center;
+  }
+
+  .maintenance-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90vw;
+  }
+
+  .maintenance-image {
+    max-width: 100%;
+    max-height: 60vh;
+    object-fit: contain;
+    margin-bottom: 1.25rem;
+  }
+
+  .maintenance-heading {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2d2d4f;
+  }
+
+  @media (min-width: 768px) {
+    .maintenance-heading {
+      font-size: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .maintenance-image {
+      max-height: 70vh;
+    }
+
+    .maintenance-heading {
+      font-size: 2.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,593 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Reveal from './Reveal.astro';
+import type { SiteContent } from '../utils/i18n';
+import gallery1 from '../assets/images/gallery1.png';
+import gallery2 from '../assets/images/gallery2.jpg';
+import gallery3 from '../assets/images/gallery3.jpg';
+import gallery4 from '../assets/images/gallery4.jpg';
+import gallery5 from '../assets/images/gallery5.jpg';
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+
+interface GalleryItem {
+  src: ImageMetadata;
+  alt: string;
+}
+
+const items: GalleryItem[] = [
+  { src: gallery1, alt: content.gallery.items[0].alt },
+  { src: gallery2, alt: content.gallery.items[1].alt },
+  { src: gallery3, alt: content.gallery.items[2].alt },
+  { src: gallery4, alt: content.gallery.items[3].alt },
+  { src: gallery5, alt: content.gallery.items[4].alt },
+];
+
+const slideCount = items.length;
+const intervalMs = 5000;
+---
+
+<section
+  id="gallery"
+  class="relative overflow-hidden bg-brand-surface py-20 sm:py-28"
+  aria-labelledby="gallery-heading"
+>
+  <div class="pointer-events-none absolute inset-0 grid-pattern opacity-40" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute -top-20 start-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-brand-accent/8 blur-3xl"
+    aria-hidden="true"
+  ></div>
+
+  <div class="section-container relative">
+    <Reveal variant="up" class="mx-auto mb-12 max-w-2xl text-center">
+      <h2 id="gallery-heading" class="section-heading">{content.gallery.title}</h2>
+      <p class="section-subheading mx-auto">{content.gallery.subtitle}</p>
+    </Reveal>
+
+    <Reveal variant="fade" delay={100}>
+      <div
+        class="gallery-carousel"
+        data-gallery-carousel
+        data-interval={intervalMs}
+        data-slide-count={slideCount}
+      >
+        <div class="gallery-frame">
+          <div
+            class="gallery-stage"
+            role="group"
+            aria-roledescription="carousel"
+            aria-label={content.gallery.title}
+          >
+            {items.map((item, index) => (
+              <figure
+                class:list={['gallery-slide', index === 0 && 'is-active']}
+                data-slide={index}
+                aria-hidden={index !== 0 ? 'true' : undefined}
+              >
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  width={Math.min(item.src.width, 800)}
+                  height={Math.round(Math.min(item.src.width, 800) * item.src.height / item.src.width)}
+                  widths={[480, 640, 800]}
+                  sizes="(max-width: 768px) 92vw, 720px"
+                  quality={78}
+                  class="gallery-slide-image"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <figcaption class="gallery-caption">
+                  <span class="gallery-caption-text">{item.alt}</span>
+                </figcaption>
+              </figure>
+            ))}
+
+            <button
+              type="button"
+              class="gallery-nav gallery-nav--prev"
+              data-gallery-prev
+              aria-label={content.gallery.prevSlide}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="gallery-nav gallery-nav--next"
+              data-gallery-next
+              aria-label={content.gallery.nextSlide}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="gallery-dots" role="tablist" aria-label={content.gallery.title}>
+            {items.map((_, index) => (
+              <button
+                type="button"
+                class:list={['gallery-dot', index === 0 && 'is-active']}
+                role="tab"
+                data-gallery-dot={index}
+                aria-label={`${content.gallery.goToSlide} ${index + 1}`}
+                aria-selected={index === 0 ? 'true' : 'false'}
+              >
+                <span class="gallery-dot-fill" style={`--dot-duration: ${intervalMs}ms`}></span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <ul class="gallery-thumbs" role="list">
+          {items.map((item, index) => (
+            <li>
+              <button
+                type="button"
+                class:list={['gallery-thumb', index === 0 && 'is-active']}
+                data-gallery-thumb={index}
+                aria-label={`${content.gallery.goToSlide} ${index + 1}`}
+                aria-current={index === 0 ? 'true' : undefined}
+              >
+                <Image
+                  src={item.src}
+                  alt=""
+                  width={Math.min(item.src.width, 160)}
+                  height={Math.round(Math.min(item.src.width, 160) * item.src.height / item.src.width)}
+                  widths={[80, 120, 160]}
+                  sizes="88px"
+                  quality={72}
+                  class="gallery-thumb-image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Reveal>
+  </div>
+</section>
+
+<style>
+  .gallery-carousel {
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+
+  .gallery-frame {
+    position: relative;
+  }
+
+  .gallery-stage {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: linear-gradient(145deg, #f3f4f6 0%, #e5e7eb 100%);
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.04),
+      0 8px 32px rgba(0, 0, 0, 0.08),
+      0 24px 64px rgba(23, 23, 229, 0.06);
+  }
+
+  @media (min-width: 768px) {
+    .gallery-stage {
+      aspect-ratio: 16 / 9;
+      border-radius: 1.75rem;
+    }
+  }
+
+  .gallery-slide {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .gallery-slide.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+  }
+
+  .gallery-slide-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery-caption {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 3rem 1.25rem 1.25rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.2) 55%, transparent 100%);
+  }
+
+  .gallery-caption-text {
+    display: block;
+    max-width: 36rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (min-width: 640px) {
+    .gallery-caption {
+      padding: 4rem 1.75rem 1.5rem;
+    }
+
+    .gallery-caption-text {
+      font-size: 1rem;
+    }
+  }
+
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-top: -1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.88);
+    color: #151515;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease,
+      opacity 0.2s ease;
+    opacity: 0;
+  }
+
+  .gallery-stage:hover .gallery-nav,
+  .gallery-stage:focus-within .gallery-nav {
+    opacity: 1;
+  }
+
+  .gallery-nav svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .gallery-nav--prev {
+    inset-inline-start: 0.75rem;
+  }
+
+  .gallery-nav--next {
+    inset-inline-end: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .gallery-nav {
+      width: 2.75rem;
+      height: 2.75rem;
+      margin-top: -1.375rem;
+      opacity: 1;
+    }
+
+    .gallery-nav--prev {
+      inset-inline-start: 1rem;
+    }
+
+    .gallery-nav--next {
+      inset-inline-end: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .gallery-nav:hover {
+      background: #fff;
+      transform: scale(1.06);
+    }
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .gallery-dot {
+    position: relative;
+    width: 2.5rem;
+    height: 0.3rem;
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    background: #d1d5db;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background 0.2s ease;
+  }
+
+  .gallery-dot:hover {
+    background: #9ca3af;
+  }
+
+  .gallery-dot-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: #1717e5;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  [dir='rtl'] .gallery-dot-fill {
+    transform-origin: right;
+  }
+
+  .gallery-dot.is-active .gallery-dot-fill {
+    animation: gallery-dot-progress var(--dot-duration, 5000ms) linear forwards;
+  }
+
+  @keyframes gallery-dot-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .gallery-thumbs {
+    display: flex;
+    justify-content: center;
+    gap: 0.625rem;
+    margin-top: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .gallery-thumbs {
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+  }
+
+  .gallery-thumb {
+    position: relative;
+    flex: 0 0 auto;
+    width: 4.5rem;
+    height: 3rem;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 0.75rem;
+    background: #fff;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition:
+      border-color 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  @media (min-width: 640px) {
+    .gallery-thumb {
+      width: 5.5rem;
+      height: 3.5rem;
+      border-radius: 0.875rem;
+    }
+  }
+
+  .gallery-thumb.is-active {
+    border-color: #1717e5;
+    box-shadow:
+      0 0 0 3px rgba(23, 23, 229, 0.15),
+      0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .gallery-thumb:hover {
+      transform: translateY(-2px);
+    }
+
+    .gallery-thumb.is-active {
+      transform: translateY(-2px) scale(1.04);
+    }
+  }
+
+  .gallery-thumb-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-slide {
+      transition: none;
+    }
+
+    .gallery-dot-fill {
+      animation: none;
+    }
+
+    .gallery-dot.is-active .gallery-dot-fill {
+      transform: scaleX(1);
+    }
+
+    .gallery-thumb,
+    .gallery-nav {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  function initGalleryCarousels() {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    document.querySelectorAll<HTMLElement>('[data-gallery-carousel]').forEach((root) => {
+      if (root.dataset.galleryInit === 'true') return;
+      root.dataset.galleryInit = 'true';
+
+      const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+      const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-gallery-dot]'));
+      const thumbs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-gallery-thumb]'));
+      const prevBtn = root.querySelector<HTMLButtonElement>('[data-gallery-prev]');
+      const nextBtn = root.querySelector<HTMLButtonElement>('[data-gallery-next]');
+      const intervalMs = Number(root.dataset.interval) || 5000;
+      const total = slides.length;
+
+      if (!total) return;
+
+      let index = 0;
+      let timer: ReturnType<typeof setInterval> | null = null;
+      let paused = reducedMotion;
+
+      const restartDotAnimation = (dot: HTMLButtonElement) => {
+        const fill = dot.querySelector<HTMLElement>('.gallery-dot-fill');
+        if (!fill) return;
+        fill.style.animation = 'none';
+        void fill.offsetWidth;
+        fill.style.animation = '';
+      };
+
+      const setSlide = (nextIndex: number) => {
+        index = (nextIndex + total) % total;
+
+        slides.forEach((slide, i) => {
+          const active = i === index;
+          slide.classList.toggle('is-active', active);
+          slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+        });
+
+        dots.forEach((dot, i) => {
+          const active = i === index;
+          dot.classList.toggle('is-active', active);
+          dot.setAttribute('aria-selected', active ? 'true' : 'false');
+          if (active && !paused) restartDotAnimation(dot);
+        });
+
+        thumbs.forEach((thumb, i) => {
+          const active = i === index;
+          thumb.classList.toggle('is-active', active);
+          if (active) thumb.setAttribute('aria-current', 'true');
+          else thumb.removeAttribute('aria-current');
+        });
+      };
+
+      const stopTimer = () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+      };
+
+      const startTimer = () => {
+        if (paused || document.hidden) return;
+        stopTimer();
+        timer = setInterval(() => setSlide(index + 1), intervalMs);
+      };
+
+      const pause = () => {
+        paused = true;
+        stopTimer();
+      };
+
+      const resume = () => {
+        if (reducedMotion) return;
+        paused = false;
+        const activeDot = dots[index];
+        if (activeDot) restartDotAnimation(activeDot);
+        startTimer();
+      };
+
+      prevBtn?.addEventListener('click', () => {
+        setSlide(index - 1);
+        stopTimer();
+        startTimer();
+      });
+
+      nextBtn?.addEventListener('click', () => {
+        setSlide(index + 1);
+        stopTimer();
+        startTimer();
+      });
+
+      dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+          const target = Number(dot.dataset.galleryDot);
+          if (!Number.isNaN(target)) {
+            setSlide(target);
+            stopTimer();
+            startTimer();
+          }
+        });
+      });
+
+      thumbs.forEach((thumb) => {
+        thumb.addEventListener('click', () => {
+          const target = Number(thumb.dataset.galleryThumb);
+          if (!Number.isNaN(target)) {
+            setSlide(target);
+            stopTimer();
+            startTimer();
+          }
+        });
+      });
+
+      root.addEventListener('mouseenter', pause);
+      root.addEventListener('mouseleave', resume);
+      root.addEventListener('focusin', pause);
+      root.addEventListener('focusout', (event) => {
+        if (!root.contains(event.relatedTarget as Node)) resume();
+      });
+
+      root.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          setSlide(index - 1);
+          stopTimer();
+          startTimer();
+        } else if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          setSlide(index + 1);
+          stopTimer();
+          startTimer();
+        }
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopTimer();
+        else if (!paused) startTimer();
+      });
+
+      if (!reducedMotion) {
+        const activeDot = dots[0];
+        if (activeDot) restartDotAnimation(activeDot);
+        startTimer();
+      }
+    });
+  }
+
+  initGalleryCarousels();
+  document.addEventListener('astro:page-load', initGalleryCarousels);
+</script>

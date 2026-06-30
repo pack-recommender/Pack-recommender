@@ -1,0 +1,66 @@
+---
+import Reveal from './Reveal.astro';
+import type { SiteContent } from '../utils/i18n';
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+
+const statIcons = [
+  // Cost savings
+  'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+  // Speed
+  'M13 10V3L4 14h7v7l9-11h-7z',
+  // Accuracy
+  'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+  // Volume
+  'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
+];
+
+const statAccents = [
+  'from-orange-500/15 to-orange-500/5 text-brand-cta',
+  'from-blue-500/15 to-blue-500/5 text-brand-accent',
+  'from-emerald-500/15 to-emerald-500/5 text-emerald-600',
+  'from-violet-500/15 to-violet-500/5 text-violet-600',
+];
+---
+
+<section id="benefits" class="relative overflow-hidden py-20 sm:py-28" aria-labelledby="benefits-heading">
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-surface via-white to-white" aria-hidden="true"></div>
+  <div class="absolute inset-0 grid-pattern opacity-40" aria-hidden="true"></div>
+
+  <div class="section-container relative">
+    <Reveal variant="up" class="mx-auto max-w-2xl text-center">
+      <p class="text-sm font-bold uppercase tracking-widest text-brand-accent">{content.benefits.eyebrow}</p>
+      <h2 id="benefits-heading" class="section-heading mt-3">{content.benefits.title}</h2>
+      <p class="section-subheading mx-auto">{content.benefits.subtitle}</p>
+    </Reveal>
+
+    <dl class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5" data-reveal-stagger>
+      {content.benefits.stats.map((stat, i) => (
+        <Reveal class="group relative overflow-hidden rounded-2xl border border-brand-border/70 bg-white/80 p-6 shadow-card backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-border hover:shadow-card-hover">
+          <div
+            class={`mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${statAccents[i]}`}
+            aria-hidden="true"
+          >
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+              <path stroke-linecap="round" stroke-linejoin="round" d={statIcons[i]} />
+            </svg>
+          </div>
+
+          <dd class="text-4xl font-bold tabular-nums tracking-tight text-brand sm:text-[2.75rem] sm:leading-none">
+            {stat.value}
+          </dd>
+          <dt class="mt-3 text-sm leading-snug text-brand-muted">{stat.label}</dt>
+
+          <div
+            class="pointer-events-none absolute -end-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            aria-hidden="true"
+          ></div>
+        </Reveal>
+      ))}
+    </dl>
+  </div>
+</section>
