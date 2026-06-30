@@ -50,7 +50,7 @@ async function handleContactPost(request, env) {
       console.error("Missing RESEND_API_KEY or CONTACT_TO_EMAIL");
       return respond(false, locale, request, "missing_config");
     }
-    const from = env.CONTACT_FROM_EMAIL || "PackRecommender <onboarding@resend.dev>";
+    const from = env.CONTACT_FROM_EMAIL || "PackRecommender <info@packrecommender.com>";
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
