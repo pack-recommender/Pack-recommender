@@ -6,7 +6,7 @@ main = "worker/index.ts"
 compatibility_date = "2026-06-30"
 
 [vars]
-CONTACT_TO_EMAIL = "segalmc@gmail.com"
+CONTACT_TO_EMAIL = "michael@packrecommender.com"
 CONTACT_FROM_EMAIL = "PackRecommender <info@packrecommender.com>"
 MAINTENANCE_MODE = "false"
 
