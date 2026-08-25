@@ -9,6 +9,8 @@ compatibility_date = "2026-06-30"
 CONTACT_TO_EMAIL = "michael@packrecommender.com,dani@packrecommender.com"
 CONTACT_FROM_EMAIL = "PackRecommender <info@packrecommender.com>"
 MAINTENANCE_MODE = "false"
+PUBLIC_RECAPTCHA_SITE_KEY = "6Lc7T5gtAAAAABsKZSOn45Tu-CxNFIGNhhx0mViq"
+# Secret via `wrangler secret put RECAPTCHA_SECRET_KEY`
 
 [assets]
 directory = "./dist"

@@ -1,27 +1,28 @@
 ---
 import Reveal from './Reveal.astro';
-import type { Locale, SiteContent } from '../utils/i18n';
+import type { SiteContent } from '../utils/i18n';
 
 interface Props {
   content: SiteContent;
-  locale: Locale;
 }
 
-const { content, locale } = Astro.props;
+const { content } = Astro.props;
 const sent = Astro.url.searchParams.get('sent') === '1';
 const error = Astro.url.searchParams.get('error') === '1';
+// reCAPTCHA Enterprise v2 — set PUBLIC_RECAPTCHA_SITE_KEY in .env / wrangler.toml
+const recaptchaSiteKey =
+  import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY?.trim() || '6Lc7T5gtAAAAABsKZSOn45Tu-CxNFIGNhhx0mViq';
 ---
 
 <section id="contact" class="py-20 sm:py-28" aria-labelledby="contact-heading">
   <div class="section-container">
-    <div class="mx-auto max-w-xl">
-      <Reveal variant="up" class="text-center">
-        <h2 id="contact-heading" class="section-heading">{content.contact.title}</h2>
-        <p class="section-subheading mx-auto">{content.contact.subtitle}</p>
-      </Reveal>
+    <Reveal variant="up" class="mx-auto max-w-4xl text-center">
+      <h2 id="contact-heading" class="section-heading">{content.contact.title}</h2>
+      <p class="section-subheading mx-auto max-w-none">{content.contact.subtitle}</p>
+    </Reveal>
 
-      <Reveal variant="scale" delay={150}>
-        <div class="mt-12" data-contact-root>
+    <Reveal variant="scale" delay={150} class="mx-auto mt-12 max-w-xl">
+      <div data-contact-root>
           <noscript>
             {sent && (
               <p
@@ -51,13 +52,21 @@ const error = Astro.url.searchParams.get('error') === '1';
             </p>
 
             <form
-              action="/api/contact"
               method="POST"
               class="space-y-6"
               aria-label={content.contact.title}
               data-contact-form
             >
-              <input type="hidden" name="locale" value={locale} />
+
+              <div class="hidden" aria-hidden="true">
+                <input
+                  type="text"
+                  name="_gotcha"
+                  value=""
+                  tabindex="-1"
+                  autocomplete="off"
+                />
+              </div>
 
               <div>
                 <label for="contact-name" class="block text-sm font-medium text-brand">
@@ -118,6 +127,17 @@ const error = Astro.url.searchParams.get('error') === '1';
                 ></textarea>
               </div>
 
+              <div data-recaptcha-field>
+                <div
+                  class="g-recaptcha"
+                  data-sitekey={recaptchaSiteKey}
+                  data-action="contact"
+                  data-callback="onContactRecaptchaVerified"
+                  data-expired-callback="onContactRecaptchaExpired"
+                  data-error-callback="onContactRecaptchaExpired"
+                ></div>
+              </div>
+
               <button type="submit" class="btn-cta w-full gap-2" data-contact-submit>
                 <span data-contact-submit-label>{content.contact.submit}</span>
                 <svg
@@ -162,7 +182,6 @@ const error = Astro.url.searchParams.get('error') === '1';
           </div>
         </div>
       </Reveal>
-    </div>
   </div>
 </section>
 
@@ -170,12 +189,52 @@ const error = Astro.url.searchParams.get('error') === '1';
   define:vars={{
     successMessage: content.contact.success,
     errorMessage: content.contact.error,
+    captchaErrorMessage: content.contact.captchaError,
     sendingLabel: content.contact.sending,
     submitText: content.contact.submit,
     initialSent: sent,
     initialError: error,
   }}
 >
+  let cachedRecaptchaToken = '';
+
+  window.onContactRecaptchaVerified = (token) => {
+    cachedRecaptchaToken = token || '';
+  };
+
+  window.onContactRecaptchaExpired = () => {
+    cachedRecaptchaToken = '';
+  };
+
+  function getRecaptchaClient() {
+    return window.grecaptcha?.enterprise ?? window.grecaptcha;
+  }
+
+  function getRecaptchaToken() {
+    if (cachedRecaptchaToken) return cachedRecaptchaToken;
+
+    const client = getRecaptchaClient();
+    if (client?.getResponse) {
+      const fromApi = client.getResponse();
+      if (fromApi) return fromApi;
+    }
+
+    const field = document.querySelector('textarea[name="g-recaptcha-response"]');
+    if (field instanceof HTMLTextAreaElement && field.value.trim()) {
+      return field.value.trim();
+    }
+
+    return '';
+  }
+
+  function resetRecaptcha() {
+    cachedRecaptchaToken = '';
+    const client = getRecaptchaClient();
+    if (client?.reset) {
+      client.reset();
+    }
+  }
+
   function initContactForm() {
     const root = document.querySelector('[data-contact-root]');
     if (!root) return;
@@ -204,8 +263,9 @@ const error = Astro.url.searchParams.get('error') === '1';
       }
     }
 
-    function showError() {
+    function showError(message = errorMessage) {
       if (errorEl instanceof HTMLElement) {
+        errorEl.textContent = message;
         errorEl.classList.remove('hidden');
       }
     }
@@ -245,7 +305,20 @@ const error = Astro.url.searchParams.get('error') === '1';
         errorEl.classList.add('hidden');
       }
 
-      const body = new FormData(form);
+      const token = getRecaptchaToken();
+      if (!token) {
+        showError(captchaErrorMessage);
+        return;
+      }
+
+      const formData = new FormData(form);
+      const body = new FormData();
+      body.set('name', String(formData.get('name') || ''));
+      body.set('company', String(formData.get('company') || ''));
+      body.set('email', String(formData.get('email') || ''));
+      body.set('message', String(formData.get('message') || ''));
+      body.set('_gotcha', '');
+      body.set('g-recaptcha-response', token);
       setLoading(true);
 
       try {
@@ -262,6 +335,12 @@ const error = Astro.url.searchParams.get('error') === '1';
           return;
         }
 
+        if (data.error === 'captcha_failed') {
+          showError(captchaErrorMessage);
+          resetRecaptcha();
+          return;
+        }
+
         showError();
       } catch {
         showError();
@@ -273,6 +352,12 @@ const error = Astro.url.searchParams.get('error') === '1';
 
   initContactForm();
   document.addEventListener('astro:page-load', initContactForm);
+
+  const recaptchaScript = document.createElement('script');
+  recaptchaScript.src = 'https://www.google.com/recaptcha/enterprise.js';
+  recaptchaScript.async = true;
+  recaptchaScript.defer = true;
+  document.head.appendChild(recaptchaScript);
 </script>
 
 <style>

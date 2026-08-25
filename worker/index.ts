@@ -15,6 +15,7 @@ interface Env {
   RESEND_API_KEY?: string;
   CONTACT_TO_EMAIL?: string;
   CONTACT_FROM_EMAIL?: string;
+  RECAPTCHA_SECRET_KEY?: string;
 }
 
 export default {
@@ -35,7 +36,7 @@ export default {
         const testValue = queryTest || cookieTest || '';
 
         if (!isValidBypass(testValue)) {
-          return Response.redirect(new URL(getMaintenancePath(pathname), url.origin), 302);
+          return Response.redirect(new URL(getMaintenancePath(), url.origin), 302);
         }
 
         if (queryTest && isValidBypass(queryTest)) {

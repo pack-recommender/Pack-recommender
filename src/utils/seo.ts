@@ -1,11 +1,8 @@
-import type { Locale } from './i18n';
-
 const SITE_URL = 'https://packrecommender.com';
 
 export interface SeoProps {
   title: string;
   description: string;
-  locale: Locale;
   path: string;
   image?: string;
 }
@@ -13,13 +10,6 @@ export interface SeoProps {
 export function getCanonicalUrl(path: string): string {
   const normalized = path.startsWith('/') ? path : `/${path}`;
   return `${SITE_URL}${normalized}`;
-}
-
-export function getAlternateUrls(): { locale: Locale; url: string }[] {
-  return [
-    { locale: 'en', url: getCanonicalUrl('/') },
-    { locale: 'he', url: getCanonicalUrl('/he') },
-  ];
 }
 
 export function getOrganizationSchema() {
@@ -39,7 +29,7 @@ export function getOrganizationSchema() {
       '@type': 'ContactPoint',
       contactType: 'sales',
       email: 'hello@packrecommender.com',
-      availableLanguage: ['English', 'Hebrew'],
+      availableLanguage: ['English'],
     },
   };
 }

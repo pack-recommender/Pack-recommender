@@ -13,12 +13,12 @@ export function isValidBypass(testValue: string | null | undefined, date = new D
   return Boolean(testValue && testValue === getTodayBypassCode(date));
 }
 
-export function getMaintenancePath(pathname: string): string {
-  return pathname.startsWith('/he') ? '/he/maintenance' : '/maintenance';
+export function getMaintenancePath(): string {
+  return '/maintenance';
 }
 
 export function isMaintenancePath(pathname: string): boolean {
-  return pathname === '/maintenance' || pathname === '/he/maintenance';
+  return pathname === '/maintenance';
 }
 
 export function isMaintenanceAssetPath(pathname: string): boolean {

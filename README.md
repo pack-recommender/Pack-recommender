@@ -119,6 +119,7 @@ Add build environment variable:
 | Variable | Example | Notes |
 |----------|---------|--------|
 | `NODE_VERSION` | `20` | Build-time |
+| `PUBLIC_RECAPTCHA_SITE_KEY` | `6LcOIZgtAAAAAGPKkoVE6wo8xZ4416oNAnfQ64g2` | reCAPTCHA v2 site key (build-time for Astro) |
 | `MAINTENANCE_MODE` | `false` | Set to `false` for live site; any other value enables maintenance gate |
 | `RESEND_API_KEY` | `re_...` | Contact form |
 | `CONTACT_TO_EMAIL` | `sales@packrecommender.com` | Contact form |
@@ -126,14 +127,18 @@ Add build environment variable:
 
 Redeploy after changing variables.
 
-Set the Resend API key as a **named** Worker secret (the name must be `RESEND_API_KEY`, not the key value):
+Set these as **Worker secrets** (encrypted, runtime):
 
 ```bash
+npx wrangler login
+npx wrangler secret put RECAPTCHA_SECRET_KEY
+# paste secret when prompted — do not put the key in the command
 npx wrangler secret put RESEND_API_KEY
-# paste your re_... key when prompted — do not put the key in the command
 ```
 
-Non-secret contact settings are in `wrangler.toml` under `[vars]`.
+Or in the dashboard: Workers & Pages → **pack-recommender** → **Settings** → **Variables and secrets** → **Add** → type **Secret** → name `RECAPTCHA_SECRET_KEY`.
+
+The site key is also in `wrangler.toml` under `[vars]` and embedded in the built HTML (it is public). The secret key must never be committed.
 
 ### Custom domain
 

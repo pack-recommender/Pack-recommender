@@ -1,28 +1,13 @@
+import { verifyRecaptchaV2 } from './recaptcha';
+
 export interface ContactEnv {
   RESEND_API_KEY?: string;
   CONTACT_TO_EMAIL?: string;
   CONTACT_FROM_EMAIL?: string;
+  RECAPTCHA_SECRET_KEY?: string;
 }
 
-type ContactError = 'invalid_input' | 'missing_config' | 'resend_failed';
-
-function getReturnPath(locale: string, status: 'sent' | 'error'): string {
-  const base = locale === 'he' ? '/he' : '/';
-  const param = status === 'sent' ? 'sent=1' : 'error=1';
-  return `${base}?${param}#contact`;
-}
-
-function wantsJson(request: Request): boolean {
-  const accept = request.headers.get('Accept') || '';
-  return accept.includes('application/json');
-}
-
-function redirect(path: string): Response {
-  return new Response(null, {
-    status: 303,
-    headers: { Location: path },
-  });
-}
+type ContactError = 'invalid_input' | 'captcha_failed' | 'missing_config' | 'resend_failed';
 
 function jsonResponse(success: boolean, error?: ContactError, detail?: string): Response {
   const body = success
@@ -37,14 +22,12 @@ function jsonResponse(success: boolean, error?: ContactError, detail?: string): 
 
 function respond(
   success: boolean,
-  locale: string,
   request: Request,
   error?: ContactError,
   detail?: string,
 ): Response {
-  return wantsJson(request)
-    ? jsonResponse(success, error, detail)
-    : redirect(getReturnPath(locale, success ? 'sent' : 'error'));
+  // /api/contact is always consumed via fetch — return JSON, not redirects
+  return jsonResponse(success, error, detail);
 }
 
 function parseResendError(body: string): string | undefined {
@@ -64,12 +47,36 @@ function parseContactToEmails(value: string | undefined): string[] {
   return [...new Set(value.split(',').map((entry) => entry.trim()).filter((entry) => EMAIL_RE.test(entry)))];
 }
 
-export async function handleContactPost(request: Request, env: ContactEnv): Promise<Response> {
-  let locale = 'en';
+function isHoneypotTriggered(formData: FormData): boolean {
+  const honeypot = String(formData.get('_gotcha') || '').trim();
+  return honeypot.length > 0;
+}
 
+function getRecaptchaSecret(env: ContactEnv): string | null {
+  const secret = env.RECAPTCHA_SECRET_KEY?.trim();
+  return secret || null;
+}
+
+async function verifyBotProtection(formData: FormData, env: ContactEnv): Promise<boolean> {
+  if (isHoneypotTriggered(formData)) {
+    return false;
+  }
+
+  const secret = getRecaptchaSecret(env);
+  if (!secret) {
+    console.error('Missing RECAPTCHA_SECRET_KEY');
+    return false;
+  }
+
+  const token = String(formData.get('g-recaptcha-response') || '').trim();
+  if (!token) return false;
+
+  return await verifyRecaptchaV2(token, secret);
+}
+
+export async function handleContactPost(request: Request, env: ContactEnv): Promise<Response> {
   try {
     const formData = await request.formData();
-    locale = String(formData.get('locale') || 'en');
 
     const name = String(formData.get('name') || '').trim().slice(0, 200);
     const company = String(formData.get('company') || '').trim().slice(0, 200);
@@ -77,17 +84,22 @@ export async function handleContactPost(request: Request, env: ContactEnv): Prom
     const message = String(formData.get('message') || '').trim().slice(0, 5000);
 
     if (!name || !company || !email || !message) {
-      return respond(false, locale, request, 'invalid_input');
+      return respond(false, request, 'invalid_input');
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return respond(false, locale, request, 'invalid_input');
+      return respond(false, request, 'invalid_input');
+    }
+
+    const botOk = await verifyBotProtection(formData, env);
+    if (!botOk) {
+      return respond(false, request, 'captcha_failed');
     }
 
     const toEmails = parseContactToEmails(env.CONTACT_TO_EMAIL);
     if (!env.RESEND_API_KEY || toEmails.length === 0) {
       console.error('Missing RESEND_API_KEY or CONTACT_TO_EMAIL');
-      return respond(false, locale, request, 'missing_config');
+      return respond(false, request, 'missing_config');
     }
 
     const from = env.CONTACT_FROM_EMAIL || 'PackRecommender <info@packrecommender.com>';
@@ -111,12 +123,12 @@ export async function handleContactPost(request: Request, env: ContactEnv): Prom
       const resendError = await resendResponse.text();
       const detail = parseResendError(resendError);
       console.error('Resend API error:', resendResponse.status, resendError);
-      return respond(false, locale, request, 'resend_failed', detail);
+      return respond(false, request, 'resend_failed', detail);
     }
 
-    return respond(true, locale, request);
+    return respond(true, request);
   } catch (error) {
     console.error('Contact form error:', error);
-    return respond(false, locale, request, 'resend_failed');
+    return respond(false, request, 'resend_failed');
   }
 }

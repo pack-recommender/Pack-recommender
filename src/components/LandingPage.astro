@@ -16,15 +16,10 @@ import ScrollAnimations from '../components/ScrollAnimations.astro';
 import MaintenanceGuard from '../components/MaintenanceGuard.astro';
 import { getImage } from 'astro:assets';
 import heroImage from '../assets/images/packages-main.png';
-import { getContent, getLocalePath, type Locale } from '../utils/i18n';
+import { getContent } from '../utils/i18n';
 
-interface Props {
-  locale: Locale;
-}
-
-const { locale } = Astro.props;
-const content = getContent(locale);
-const path = getLocalePath(locale);
+const content = getContent();
+const path = '/';
 
 const heroLcp400 = await getImage({ src: heroImage, width: 400, format: 'webp', quality: 78 });
 const heroLcp600 = await getImage({ src: heroImage, width: 600, format: 'webp', quality: 76 });
@@ -34,7 +29,6 @@ const heroLcp640 = await getImage({ src: heroImage, width: 640, format: 'webp', 
 <BaseLayout
   title={content.meta.title}
   description={content.meta.description}
-  locale={locale}
   path={path}
 >
   <Fragment slot="head">
@@ -60,7 +54,7 @@ const heroLcp640 = await getImage({ src: heroImage, width: 640, format: 'webp', 
     />
   </Fragment>
 
-  <Header locale={locale} content={content} />
+  <Header content={content} />
   <main id="main-content" class="flex-1">
     <Hero content={content} />
     <TrustedBy content={content} />
@@ -68,12 +62,12 @@ const heroLcp640 = await getImage({ src: heroImage, width: 640, format: 'webp', 
     <Features content={content} />
     <Benefits content={content} />
     <ProductPreview content={content} />
-    <Gallery content={content} locale={locale} />
+    <Gallery content={content} />
     <Testimonials content={content} />
     <FAQ content={content} />
-    <ContactForm content={content} locale={locale} />
+    <ContactForm content={content} />
   </main>
-  <Footer locale={locale} content={content} />
+  <Footer content={content} />
   <ScrollAnimations />
   <MaintenanceGuard />
 </BaseLayout>

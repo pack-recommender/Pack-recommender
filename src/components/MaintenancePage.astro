@@ -1,18 +1,11 @@
 ---
-import type { Locale } from '../utils/i18n';
-import { getContent, getDir } from '../utils/i18n';
+import { getContent } from '../utils/i18n';
 
-interface Props {
-  locale: Locale;
-}
-
-const { locale } = Astro.props;
-const content = getContent(locale);
-const dir = getDir(locale);
+const content = getContent();
 ---
 
 <!doctype html>
-<html lang={locale} dir={dir}>
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

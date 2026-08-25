@@ -1,4 +1,4 @@
-export type Locale = 'en' | 'he';
+export type Locale = 'en';
 
 export interface SiteContent {
   meta: {
@@ -74,11 +74,14 @@ export interface SiteContent {
     sending: string;
     success: string;
     error: string;
+    captcha: string;
+    captchaError: string;
     placeholders: {
       name: string;
       company: string;
       email: string;
       message: string;
+      captcha: string;
     };
   };
   footer: {
@@ -287,11 +290,14 @@ const en: SiteContent = {
     sending: 'Sending…',
     success: 'Thank you! Your message has been sent. We will be in touch soon.',
     error: 'Something went wrong. Please try again or email us directly.',
+    captcha: 'Security check',
+    captchaError: 'Please check "I\'m not a robot" and try again.',
     placeholders: {
       name: 'Your name',
       company: 'Your company',
       email: 'name@company.com',
       message: 'Tell us about your packaging challenges',
+      captcha: 'Your answer',
     },
   },
   footer: {
@@ -307,226 +313,8 @@ const en: SiteContent = {
   },
 };
 
-const he: SiteContent = {
-  meta: {
-    title: 'PackRecommender — המלצות אריזה מבוססות AI ליצרנים',
-    description:
-      'מצאו את פתרון האריזה הטוב ביותר תוך שניות באמצעות AI. הפחיתו עלויות, שפרו קיימות והאיצו פיתוח מוצרים ליצרנים.',
-  },
-  nav: {
-    howItWorks: 'איך זה עובד',
-    features: 'יכולות',
-    benefits: 'יתרונות',
-    product: 'מוצר',
-    gallery: 'גלריה',
-    testimonials: 'המלצות',
-    faq: 'שאלות נפוצות',
-    contact: 'צור קשר',
-    requestDemo: 'בקש הדגמה',
-    contactSales: 'צור קשר עם מכירות',
-  },
-  hero: {
-    title: 'המלצות אריזה מבוססות AI ליצרנים',
-    subtitle:
-      'מצאו את פתרון האריזה הטוב ביותר תוך שניות באמצעות AI. הפחיתו עלויות, שפרו קיימות והאיצו פיתוח מוצרים.',
-    requestDemo: 'בקש הדגמה',
-    contactSales: 'צור קשר עם מכירות',
-  },
-  trusted: {
-    title: 'נבחר על ידי יצרנים ברחבי העולם',
-  },
-  howItWorks: {
-    title: 'איך זה עובד',
-    subtitle: 'מנתוני מוצר לאריזה מותאמת בשלושה שלבים פשוטים.',
-    steps: [
-      {
-        title: 'העלאת פרטי מוצר',
-        description:
-          'הזינו מידות, משקל, שבירות ודרישות לוגיסטיות דרך הממשק האינטואיטיבי שלנו או אינטגרציית API.',
-      },
-      {
-        title: 'ה-AI מנתח את הדרישות',
-        description:
-          'המנוע שלנו מעריך מידות, משקל, שבירות, יעדי קיימות ואילוצי לוגיסטיקה בזמן אמת.',
-      },
-      {
-        title: 'קבלת המלצות מותאמות',
-        description:
-          'קבלו אפשרויות אריזה מדורגות עם ניתוח עלויות, ציוני קיימות והתאמת ספקים — מוכנות לייצוא.',
-      },
-    ],
-  },
-  features: {
-    title: 'כל מה שצריך לאופטימיזציה של אריזה',
-    subtitle: 'כלים ברמת ארגון שתוכננו לצוותי ייצור.',
-    items: [
-      {
-        title: 'מנוע המלצות AI',
-        description:
-          'מודלים של למידת מכונה מאומנים על אלפי תרחישי אריזה מספקים הצעות מדויקות ומותאמות להקשר.',
-      },
-      {
-        title: 'אופטימיזציית עלויות אריזה',
-        description:
-          'השוו עלויות חומרים ולוגיסטיקה בין אפשרויות לזיהוי חיסכון ללא פשרות על ההגנה.',
-      },
-      {
-        title: 'ניתוח קיימות',
-        description: 'העריכו טביעת פחמן, יכולת מיחזור ויעילות חומרים בכל המלצה.',
-      },
-      {
-        title: 'השוואת חומרים',
-        description: 'ניתוח מקביל של גלופים, סרטים גמישים, פלסטיק קשיח וחלופות ברות קיימא.',
-      },
-      {
-        title: 'התאמת ספקים',
-        description:
-          'התחברו לספקי אריזה מוסמכים שמתאימים לנפח, גיאוגרפיה ודרישות הסמכה שלכם.',
-      },
-      {
-        title: 'ייצוא דוחות',
-        description: 'הפיקו דוחות PDF ו-CSV לבעלי עניין, רכש ותאימות קיימות.',
-      },
-    ],
-  },
-  benefits: {
-    eyebrow: 'השפעה',
-    title: 'השפעה מדידה על התפעול שלכם',
-    subtitle: 'תוצאות אמיתיות מיצרנים שמשתמשים ב-PackRecommender.',
-    stats: [
-      { value: '25%', label: 'הפחתת עלות אריזה' },
-      { value: '<10ש׳', label: 'זמן המלצה' },
-      { value: '95%', label: 'דיוק אריזה' },
-      { value: '1000+', label: 'סוגי אריזה נתמכים' },
-    ],
-  },
-  product: {
-    title: 'ראו את PackRecommender בפעולה',
-    subtitle: 'תהליך עבודה יעיל מקלט לתובנות מעשיות.',
-    stages: [
-      'קלט מוצר',
-      'מנוע AI',
-      'אריזה מומלצת',
-      'ניתוח עלויות',
-      'ציון קיימות',
-    ],
-  },
-  gallery: {
-    title: 'אריזה בשטח',
-    subtitle: 'פתרונות אריזה מהעולם האמיתי בתעשיות וחומרים שונים.',
-    prevSlide: 'שקופית קודמת',
-    nextSlide: 'שקופית הבאה',
-    goToSlide: 'עבור לשקופית',
-    items: [
-      { alt: 'קרטונים מודפסים בהתאמה אישית' },
-      { alt: 'מתקן ייצור אריזה תעשייתי' },
-      { alt: 'אריזת שקית גמישה בת קיימא' },
-      { alt: 'תצוגת אריזת מוצר לקמעונאות' },
-      { alt: 'אריזות משלוח ולוגיסטיקה מקרטון' },
-    ],
-  },
-  testimonials: {
-    title: 'מה יצרנים אומרים',
-    items: [
-      {
-        quote:
-          'PackRecommender קיצר את מחזור הערכת האריזה שלנו משבועות לדקות. החיסכון בעלויות לבדו החזיר את עלות הפלטפורמה ברבעון הראשון.',
-        name: 'שרה צ׳ן',
-        role: 'סמנכ״ל תפעול',
-        company: 'NovaTech Manufacturing',
-      },
-      {
-        quote:
-          'ציון הקיימות עזר לנו לעמוד ביעדי ESG תוך הפחתת פסולת חומרים ב-18%. זה כעת חלק מתהליך השקת המוצר הסטנדרטי שלנו.',
-        name: 'מרקוס ובר',
-        role: 'ראש קיימות',
-        company: 'EuroPack Industries',
-      },
-      {
-        quote:
-          'שילבנו את PackRecommender בתהליך ה-R&D שלנו. המהנדסים שלנו מקבלים המלצות אריזה לפני שהאב טיפוס הראשון נבנה.',
-        name: 'רחל אוקונקו',
-        role: 'מנהלת פיתוח מוצר',
-        company: 'Precision Components Ltd',
-      },
-    ],
-  },
-  faq: {
-    title: 'שאלות נפוצות',
-    items: [
-      {
-        question: 'אילו סוגי מוצרים PackRecommender תומך?',
-        answer:
-          'PackRecommender תומך במגוון רחב של מוצרים מיוצרים כולל אלקטרוניקה, מזון ומשקאות, תרופות, מוצרי צריכה ורכיבים תעשייתיים. מסד הנתונים שלנו מכסה 1,000+ סוגי אריזה.',
-      },
-      {
-        question: 'מה רמת הדיוק של המלצות ה-AI?',
-        answer:
-          'מנוע ההמלצות שלנו משיג 95% דיוק על בסיס אימות מול פריסות אריזה בעולם האמיתי. ההמלצות משתפרות באופן מתמיד ככל שמעובדים יותר נתונים.',
-      },
-      {
-        question: 'האם PackRecommender יכול להשתלב במערכות הקיימות שלנו?',
-        answer:
-          'כן. אנו מציעים גישת REST API ואינטגרציות עם פלטפורמות PLM, ERP ורכש נפוצות. לקוחות ארגוניים יכולים גם להשתמש ב-webhooks מותאמים.',
-      },
-      {
-        question: 'האם נתוני המוצר שלי מאובטחים?',
-        answer:
-          'כל הנתונים מוצפנים בתעבורה ובמנוחה. אנו תואמים SOC 2 ומציעים אפשרויות פריסה מקומית לארגונים עם דרישות מחייבות מיקום נתונים.',
-      },
-      {
-        question: 'איך עובד התמחור?',
-        answer:
-          'אנו מציעים תוכניות מדורגות לפי נפח המלצות וגודל הצוות. צרו קשר עם צוות המכירות שלנו לקבלת הצעת מחיר מותאמת לקנה המידה של הייצור שלכם.',
-      },
-      {
-        question: 'האם אתם תומכים בדרישות משלוח בינלאומיות?',
-        answer:
-          'כן. מודול הלוגיסטיקה שלנו לוקח בחשבון תקנות משלוח בינלאומיות, תקני ISTA ודרישות תאימות קיימות אזוריות.',
-      },
-    ],
-  },
-  contact: {
-    title: 'צרו קשר',
-    subtitle: 'בקשו הדגמה או דברו עם צוות המכירות שלנו על צרכי האריזה שלכם.',
-    name: 'שם',
-    company: 'חברה',
-    email: 'אימייל',
-    message: 'הודעה',
-    submit: 'שלח הודעה',
-    sending: 'שולח…',
-    success: 'תודה! ההודעה נשלחה. ניצור איתכם קשר בהקדם.',
-    error: 'משהו השתבש. נסו שוב או שלחו לנו אימייל ישירות.',
-    placeholders: {
-      name: 'השם שלך',
-      company: 'שם החברה',
-      email: 'name@company.com',
-      message: 'ספרו לנו על אתגרי האריזה שלכם',
-    },
-  },
-  footer: {
-    privacy: 'פרטיות',
-    terms: 'תנאים',
-    tagline: 'המלצות אריזה מבוססות AI ליצרנים מודרניים.',
-    rights: 'כל הזכויות שמורות.',
-  },
-  maintenance: {
-    pageTitle: 'בתחזוקה — PackRecommender',
-    heading: 'אנחנו מהדקים כמה ברגים!',
-    imageAlt: 'האתר בתחזוקה',
-  },
-};
+export const content: SiteContent = en;
 
-export const content: Record<Locale, SiteContent> = { en, he };
-
-export function getContent(locale: Locale): SiteContent {
-  return content[locale];
-}
-
-export function getDir(locale: Locale): 'ltr' | 'rtl' {
-  return locale === 'he' ? 'rtl' : 'ltr';
-}
-
-export function getLocalePath(locale: Locale): string {
-  return locale === 'en' ? '/' : `/${locale}`;
+export function getContent(): SiteContent {
+  return content;
 }
